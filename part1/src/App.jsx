@@ -4,17 +4,24 @@ import Total from './components/Total.jsx'
 
 const App = () => {
   const course = 'Half Stack application development'
-  const courseContent = [
-    { part1: 'Fundamentals of React', exercises1: 10 },
-    { part2: 'Using props to pass data', exercises2: 7 },
-    { part3: 'State of a component', exercises3: 14 }
-  ]
+  const part1 = {
+    name: 'Fundamentals of React',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Using props to pass data',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'State of a component',
+    exercises: 14
+  }
 
   return (
     <div>
       <Header course={course} />
-      <Content content={courseContent} />
-      <Total content={courseContent} />
+      <Content content={[part1, part2, part3]} />
+      <Total content={[part1, part2, part3]} />
     </div>
   )
 }
