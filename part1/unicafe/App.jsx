@@ -24,6 +24,18 @@ const History = ({ allClicks, positiveClicks }) => {
   )
 }
 
+const Statistics = ({ good, neutral, bad, allClicks }) => {
+  return (
+    <>
+      <h1>statistics</h1>
+      <div>good {good}</div>
+      <div>neutral {neutral}</div>
+      <div>bad {bad}</div>
+      <History allClicks={allClicks} positiveClicks={good} />
+    </>
+  )
+}
+
 const Button = (props) => (
   <div>
     <button onClick={props.handleClick}>{props.text}</button>
@@ -64,11 +76,12 @@ const App = () => {
         <Button text={'neutral'} handleClick={() => handleClicks('neutral')} />
         <Button text={'bad'} handleClick={() => handleClicks('bad')} />
       </div>
-      <h1>statistics</h1>
-      <div>good {good}</div>
-      <div>neutral {neutral}</div>
-      <div>bad {bad}</div>
-      <History allClicks={allClicks} positiveClicks={good} />
+      <Statistics
+        allClicks={allClicks}
+        good={good}
+        bad={bad}
+        neutral={neutral}
+      />
     </>
   )
 }
