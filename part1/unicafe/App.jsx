@@ -25,13 +25,19 @@ const History = ({ allClicks, positiveClicks }) => {
 }
 
 const Statistics = ({ good, neutral, bad, allClicks }) => {
-  return (
+  const statisticsWithFeedback = (
     <>
-      <h1>statistics</h1>
       <div>good {good}</div>
       <div>neutral {neutral}</div>
       <div>bad {bad}</div>
       <History allClicks={allClicks} positiveClicks={good} />
+    </>
+  )
+
+  return (
+    <>
+      <h1>statistics</h1>
+      {allClicks.length === 0 ? 'No feedback given' : statisticsWithFeedback}
     </>
   )
 }
