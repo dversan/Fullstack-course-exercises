@@ -13,18 +13,31 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(
+    new Array(anecdotes.length + 1).join('0').split('').map(parseFloat)
+  )
 
-  const selectAnecdoteToDisplay = () => {
+  const selectAnecdoteHandler = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length)
-    setSelected(randomNumber)
 
-    console.log(selected)
+    setSelected(randomNumber)
+  }
+
+  const voteAnecdoteHandler = () => {
+    const votesListCopy = [...votes]
+    votesListCopy[selected] += 1
+
+    setVotes(votesListCopy)
   }
 
   return (
     <>
       <div>{anecdotes[selected]}</div>
-      <button onClick={selectAnecdoteToDisplay}>next anecdote</button>
+      <div>{`Has ${votes[selected]} votes.`}</div>
+      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+        <button onClick={voteAnecdoteHandler}>vote</button>
+        <button onClick={selectAnecdoteHandler}>next anecdote</button>
+      </div>
     </>
   )
 }
