@@ -1,5 +1,43 @@
 import { useState } from 'react'
 
+const Button = ({ handleClick, text }) => (
+  <div>
+    <button onClick={handleClick}>{text}</button>
+  </div>
+)
+
+const AnecdoteOfTheDaySection = ({
+  anecdotes,
+  selected,
+  votes,
+  selectAnecdoteHandler,
+  voteAnecdoteHandler
+}) => {
+  return (
+    <>
+      <h1>Anecdote of the day</h1>
+      <div>{anecdotes[selected]}</div>
+      <div>{`Has ${votes[selected]} votes.`}</div>
+      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+        <Button handleClick={voteAnecdoteHandler} text={'vote'} />
+        <Button handleClick={selectAnecdoteHandler} text={'next anecdote'} />
+      </div>
+    </>
+  )
+}
+
+const MostVotedAnecdoteSection = ({ anecdotes, votes }) => {
+  const maxNumberOfVotes = Math.max(...votes)
+
+  return (
+    <>
+      <h1>Anecdote with most votes</h1>
+      <div>{anecdotes[votes.indexOf(maxNumberOfVotes)]}</div>
+      <div>{`Has ${maxNumberOfVotes} votes.`}</div>
+    </>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -12,32 +50,39 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
 
-  const [selected, setSelected] = useState(0)
+  const [selectedAnecdote, setSelectedAnecdote] = useState(0)
   const [votes, setVotes] = useState(
     new Array(anecdotes.length + 1).join('0').split('').map(parseFloat)
+  )
+
+  const votesSum = votes.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
   )
 
   const selectAnecdoteHandler = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length)
 
-    setSelected(randomNumber)
+    setSelectedAnecdote(randomNumber)
   }
 
   const voteAnecdoteHandler = () => {
     const votesListCopy = [...votes]
-    votesListCopy[selected] += 1
+    votesListCopy[selectedAnecdote] += 1
 
     setVotes(votesListCopy)
   }
 
   return (
     <>
-      <div>{anecdotes[selected]}</div>
-      <div>{`Has ${votes[selected]} votes.`}</div>
-      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-        <button onClick={voteAnecdoteHandler}>vote</button>
-        <button onClick={selectAnecdoteHandler}>next anecdote</button>
-      </div>
+      <AnecdoteOfTheDaySection
+        anecdotes={anecdotes}
+        votes={votes}
+        selected={selectedAnecdote}
+        selectAnecdoteHandler={() => selectAnecdoteHandler()}
+        voteAnecdoteHandler={() => voteAnecdoteHandler()}
+      />
+      {votesSum === 0 ? '' : <MostVotedAnecdoteSection votes={votes} anecdotes={anecdotes} /> }
     </>
   )
 }
