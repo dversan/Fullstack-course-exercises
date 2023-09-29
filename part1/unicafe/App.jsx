@@ -16,30 +16,42 @@ const History = ({ allClicks, positiveClicks }) => {
   }
 
   return (
-    <>
-      <div>all {totalClicks}</div>
-      <div>average {average()}</div>
-      <div>positive {positiveClicksPercentage()}</div>
-    </>
+    <tbody>
+      <tr>
+        <td>all</td>
+        <td>{totalClicks}</td>
+      </tr>
+      <tr>
+        <td>average</td>
+        <td>{average().toFixed(1)}</td>
+      </tr>
+      <tr>
+        <td>positive</td>
+        <td>{`${positiveClicksPercentage().toFixed(1)} %`}</td>
+      </tr>
+    </tbody>
   )
 }
 
 const StatisticLine = ({ text, value }) => {
   return (
-    <div>
-      {text} {value}
-    </div>
+    <tbody>
+      <tr>
+        <td>{text}</td>
+        <td>{value}</td>
+      </tr>
+    </tbody>
   )
 }
 
 const Statistics = ({ good, neutral, bad, allClicks }) => {
   const statisticsWithFeedback = (
-    <>
+    <table>
       <StatisticLine text={'good'} value={good} />
       <StatisticLine text={'neutral'} value={neutral} />
       <StatisticLine text={'bad'} value={bad} />
       <History allClicks={allClicks} positiveClicks={good} />
-    </>
+    </table>
   )
 
   return (
