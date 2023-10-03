@@ -1,13 +1,13 @@
 const Total = (props) => {
-  return (
-    <p>
-      {`Number of exercises ${
-        props.parts[0].exercises +
-        props.parts[1].exercises +
-        props.parts[2].exercises
-      }`}
-    </p>
-  )
+  let courseExercisesSum = 0
+
+  props.parts.forEach((part) => {
+    courseExercisesSum += part.exercises
+  })
+
+  console.log(courseExercisesSum)
+
+  return `Total of ${courseExercisesSum} exercises`
 }
 
 export default Total
