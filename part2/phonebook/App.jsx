@@ -26,14 +26,12 @@ const App = () => {
 
   const nameFilterHandler = (e) => {
     setPersonsFiltered(
-      persons.filter((p) =>
-        p.name.toLowerCase().includes(e.target.value.toLowerCase())
-      )
+      e.target.value !== ''
+        ? persons.filter((p) =>
+          p.name.toLowerCase().includes(e.target.value.toLowerCase())
+        )
+        : []
     )
-
-    if (e.target.value === '') {
-      setPersonsFiltered([])
-    }
   }
 
   const newNameInputHandler = (e) => {
@@ -44,7 +42,8 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
-  const listToBeDisplayed = personsFiltered.length === 0 ? persons : personsFiltered
+  const listToBeDisplayed =
+    personsFiltered.length === 0 ? persons : personsFiltered
 
   return (
     <div>
