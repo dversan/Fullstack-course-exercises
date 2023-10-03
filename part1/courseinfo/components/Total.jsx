@@ -6,7 +6,7 @@ const Total = ({ parts }) => {
     0
   )
 
-  return `Total of ${courseExercisesSum} exercises`
+  return <h4>{`Total of ${courseExercisesSum} exercises`}</h4>
 }
 
 export default Total
