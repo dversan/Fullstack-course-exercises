@@ -4,9 +4,17 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
   const [newName, setNewName] = useState('')
 
+  const nameAlreadyExists =
+    persons.filter((p) => p.name === newName).length === 1
+
   const formSubmitHandler = (e) => {
     e.preventDefault()
-    setPersons(persons.concat({ name: newName }))
+
+    if (nameAlreadyExists) {
+      alert(`${newName} is already added to the phonebook`)
+    } else {
+      setPersons(persons.concat({ name: newName }))
+    }
   }
 
   const newNameInputHandler = (e) => {
