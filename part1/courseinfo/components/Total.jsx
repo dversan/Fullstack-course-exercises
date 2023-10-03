@@ -1,11 +1,10 @@
-const Total = (props) => {
-  let courseExercisesSum = 0
+const Total = ({ parts }) => {
+  const exercises = parts.map((p) => p.exercises)
 
-  props.parts.forEach((part) => {
-    courseExercisesSum += part.exercises
-  })
-
-  console.log(courseExercisesSum)
+  const courseExercisesSum = exercises.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  )
 
   return `Total of ${courseExercisesSum} exercises`
 }
