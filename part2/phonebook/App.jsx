@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter.jsx'
+import PersonForm from './components/PersonForm.jsx'
+import Persons from './components/Persons.jsx'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -9,22 +12,12 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filterText, setFilterText] = useState('')
   const [personsFiltered, setPersonsFiltered] = useState([])
 
-  const nameAlreadyExists =
-    persons.filter((p) => p.name === newName).length === 1
-
-  const formSubmitHandler = (e) => {
-    e.preventDefault()
-
-    if (nameAlreadyExists) {
-      alert(`${newName} is already added to the phonebook`)
-    } else {
-      setPersons(persons.concat({ name: newName, number: newNumber }))
-    }
-  }
-
   const nameFilterHandler = (e) => {
+    setFilterText(e.target.value)
+
     setPersonsFiltered(
       e.target.value !== ''
         ? persons.filter((p) =>
@@ -42,34 +35,43 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
-  const listToBeDisplayed =
-    personsFiltered.length === 0 ? persons : personsFiltered
+  const formSubmitHandler = (e) => {
+    e.preventDefault()
+
+    const nameAlreadyExists =
+      persons.filter((p) => p.name === newName).length === 1
+
+    if (nameAlreadyExists) {
+      alert(`${newName} is already added to the phonebook`)
+    } else {
+      setPersons(
+        persons.concat({
+          name: newName,
+          number: newNumber,
+          id: persons.length + 1
+        })
+      )
+    }
+  }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with:
-        {<input onChange={nameFilterHandler} />}
-      </div>
-      <h2>Add new</h2>
-      <form onSubmit={formSubmitHandler}>
-        <div style={{ marginBottom: '5px' }}>
-          name: <input value={newName} onChange={newNameInputHandler} />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          number: <input value={newNumber} onChange={newNumberInputHandler} />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {persons.length === 0
-        ? 'Please enter a Name'
-        : listToBeDisplayed.map((person) => (
-            <div key={person.name}>{`${person.name} ${person.number}`}</div>
-        ))}
+      <Filter onChange={nameFilterHandler} />
+      <h3>Add new</h3>
+      <PersonForm
+        onSubmit={formSubmitHandler}
+        newName={newName}
+        newNumber={newNumber}
+        onChangeName={newNameInputHandler}
+        onChangeNumber={newNumberInputHandler}
+      />
+      <h3>Numbers</h3>
+      <Persons
+        personsFiltered={personsFiltered}
+        persons={persons}
+        filterValue={filterText}
+      />
     </div>
   )
 }
