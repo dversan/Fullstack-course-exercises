@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter.jsx'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
-import contacts from '../services/contacts.jsx'
+import personsApi from '../services/personsApi.jsx'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,7 +12,7 @@ const App = () => {
   const [personsFiltered, setPersonsFiltered] = useState([])
 
   useEffect(() => {
-    contacts.getAll().then((r) => setPersons(r))
+    personsApi.getAll().then((r) => setPersons(r))
   }, [])
 
   const nameFilterHandler = (e) => {
@@ -44,9 +44,17 @@ const App = () => {
     if (nameAlreadyExists) {
       alert(`${newName} is already added to the phonebook`)
     } else {
-      contacts
+      personsApi
         .create({ name: newName, number: newNumber })
-        .then(() => contacts.getAll().then((r) => setPersons(r)))
+        .then(() => personsApi.getAll().then((r) => setPersons(r)))
+    }
+  }
+
+  const deletePersonClickHandler = (person) => {
+    if (window.confirm(`Delete ${person.name}`)) {
+      personsApi
+        .remove(person.id)
+        .then(() => personsApi.getAll().then((r) => setPersons(r)))
     }
   }
 
@@ -67,6 +75,7 @@ const App = () => {
         personsFiltered={personsFiltered}
         persons={persons}
         filterValue={filterText}
+        onClick={deletePersonClickHandler}
       />
     </div>
   )
