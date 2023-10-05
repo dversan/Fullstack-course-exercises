@@ -3,9 +3,9 @@ import styles from './notification.module.css'
 const Notification = ({ message, notificationType }) => {
   return (
     <div
-      className={`${styles.notification} ${
+      className={
         notificationType === 'success' ? styles.success : styles.warning
-      }`}
+      }
     >
       {message}
     </div>
