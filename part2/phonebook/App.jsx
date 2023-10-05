@@ -3,6 +3,7 @@ import Filter from './components/Filter.jsx'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
 import personsApi from '../services/personsApi.jsx'
+import Notification from './components/Notification/Notification.jsx'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState('')
   const [personsFiltered, setPersonsFiltered] = useState([])
+  const [notification, setNotification] = useState('')
 
   const updatePersons = () => personsApi.getAll().then((r) => setPersons(r))
 
@@ -65,6 +67,13 @@ const App = () => {
       personsApi
         .create({ name: newName, number: newNumber })
         .then(updatePersons)
+        .finally(() => {
+          setNotification(`Added ${newName}`)
+
+          setTimeout(() => {
+            setNotification(null)
+          }, 2000)
+        })
     }
   }
 
@@ -77,6 +86,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {notification && <Notification message={notification} />}
       <Filter onChange={nameFilterHandler} />
       <h3>Add new</h3>
       <PersonForm
