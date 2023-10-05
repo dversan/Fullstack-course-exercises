@@ -11,7 +11,10 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState('')
   const [personsFiltered, setPersonsFiltered] = useState([])
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState({
+    message: '',
+    type: ''
+  })
 
   const updatePersons = () => personsApi.getAll().then((r) => setPersons(r))
 
@@ -52,6 +55,12 @@ const App = () => {
       personsApi
         .update(selectedPersonId, { name: newName, number: newNumber })
         .then(updatePersons)
+        .catch(() =>
+          setNotification({
+            message: `Information of ${newName} has already been removed from server`,
+            type: 'warning'
+          })
+        )
     }
   }
 
@@ -68,10 +77,10 @@ const App = () => {
         .create({ name: newName, number: newNumber })
         .then(updatePersons)
         .finally(() => {
-          setNotification(`Added ${newName}`)
+          setNotification({ message: `Added ${newName}`, type: 'success' })
 
           setTimeout(() => {
-            setNotification(null)
+            setNotification({ message: '', type: '' })
           }, 2000)
         })
     }
@@ -86,7 +95,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {notification && <Notification message={notification} />}
+      {notification.message && (
+        <Notification
+          message={notification.message}
+          notificationType={notification.type}
+        />
+      )}
       <Filter onChange={nameFilterHandler} />
       <h3>Add new</h3>
       <PersonForm
