@@ -11,6 +11,8 @@ const App = () => {
   const [filterText, setFilterText] = useState('')
   const [personsFiltered, setPersonsFiltered] = useState([])
 
+  const updatePersons = () => personsApi.getAll().then((r) => setPersons(r))
+
   useEffect(() => {
     personsApi.getAll().then((r) => setPersons(r))
   }, [])
@@ -35,26 +37,40 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
+  const updatePerson = () => {
+    const selectedPersonId = persons.filter(
+      (p) => p.name.toLowerCase() === newName.toLowerCase()
+    )[0].id
+
+    if (
+      window.confirm(
+        `${newName} is already added to the phonebook, replace the old number with a new one?`
+      )
+    ) {
+      personsApi
+        .update(selectedPersonId, { name: newName, number: newNumber })
+        .then(updatePersons)
+    }
+  }
+
   const formSubmitHandler = (e) => {
     e.preventDefault()
 
-    const nameAlreadyExists =
+    const nameAlreadyExists = () =>
       persons.filter((p) => p.name === newName).length === 1
 
-    if (nameAlreadyExists) {
-      alert(`${newName} is already added to the phonebook`)
+    if (nameAlreadyExists()) {
+      updatePerson()
     } else {
       personsApi
         .create({ name: newName, number: newNumber })
-        .then(() => personsApi.getAll().then((r) => setPersons(r)))
+        .then(updatePersons)
     }
   }
 
   const deletePersonClickHandler = (person) => {
     if (window.confirm(`Delete ${person.name}`)) {
-      personsApi
-        .remove(person.id)
-        .then(() => personsApi.getAll().then((r) => setPersons(r)))
+      personsApi.remove(person.id).then(updatePersons)
     }
   }
 
