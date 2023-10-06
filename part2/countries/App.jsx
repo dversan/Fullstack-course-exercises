@@ -7,12 +7,20 @@ import Country from './components/Country.jsx'
 const App = () => {
   const [countries, setCountries] = useState([])
   const [countriesFiltered, setCountriesFiltered] = useState([])
+  const [countryData, setCountryData] = useState([])
+  const [filterValue, setFilterValue] = useState('')
 
   useEffect(() => {
     countriesApi.getAll().then((r) => setCountries(r))
   }, [])
 
   const countryFilterHandler = (e) => {
+    setFilterValue(e.target.value)
+
+    if (filterValue === '') {
+      setCountryData([])
+    }
+
     setCountriesFiltered(
       e.target.value !== ''
         ? countries.filter((c) =>
@@ -20,6 +28,10 @@ const App = () => {
           )
         : []
     )
+  }
+
+  const showCountryHandler = (selectedCountryName) => {
+    countriesApi.getCountry(selectedCountryName).then((r) => setCountryData(r))
   }
 
   return (
@@ -32,7 +44,16 @@ const App = () => {
       )}
 
       {countriesFiltered.length > 1 && (
-        <Countries countriesFiltered={countriesFiltered} />
+        <div>
+          {countryData.length === 0 ? (
+            <Countries
+              countriesFiltered={countriesFiltered}
+              onClick={showCountryHandler}
+            />
+          ) : (
+            <Country country={countryData || {}} />
+          )}
+        </div>
       )}
     </div>
   )

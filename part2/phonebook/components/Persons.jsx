@@ -17,7 +17,7 @@ const Persons = ({ persons, personsFiltered, filterValue, onClick }) => {
             <div key={person.id} style={{ display: 'flex', gap: '10px' }}>
               <div>{`${person.name} ${person.number}`}</div>
               <button onClick={() => onClick(person)}>
-                delete
+                {'delete'}
               </button>
             </div>
         ))}

@@ -21,4 +21,11 @@ const remove = (id) => {
   return request.then((response) => response.data)
 }
 
-export default { getAll, create, update, remove }
+const getCountry = (selectedCountryName) => {
+  const request = axios.get(
+    `https://studies.cs.helsinki.fi/restcountries/api/name/${selectedCountryName}`
+  )
+  return request.then((response) => response.data)
+}
+
+export default { getAll, create, update, remove, getCountry }
