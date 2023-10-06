@@ -28,4 +28,15 @@ const getCountry = (selectedCountryName) => {
   return request.then((response) => response.data)
 }
 
-export default { getAll, create, update, remove, getCountry }
+const getCountryWeather = (countryCoordinates) => {
+  const request = axios.get(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${
+      countryCoordinates.lat
+    }&lon=${countryCoordinates.lon}&appid=${
+      import.meta.env.VITE_WEATHER_API_KEY
+    }`
+  )
+  return request.then((response) => response.data)
+}
+
+export default { getAll, create, update, remove, getCountry, getCountryWeather }
