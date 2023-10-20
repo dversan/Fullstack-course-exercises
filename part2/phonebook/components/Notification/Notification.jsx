@@ -1,6 +1,12 @@
 import styles from './notification.module.css'
 
-const Notification = ({ message, notificationType }) => {
+const Notification = ({ message, notificationType, resetNotification }) => {
+  if (message) {
+    setTimeout(() => {
+      resetNotification()
+    }, 2000)
+  }
+
   return (
     <div
       className={

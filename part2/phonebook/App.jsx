@@ -78,10 +78,6 @@ const App = () => {
         .then(updatePersons)
         .finally(() => {
           setNotification({ message: `Added ${newName}`, type: 'success' })
-
-          setTimeout(() => {
-            setNotification({ message: '', type: '' })
-          }, 2000)
         })
     }
   }
@@ -96,14 +92,13 @@ const App = () => {
             message: `${person.name} has been removed`,
             type: 'warning'
           })
-
-          setTimeout(() => {
-            setNotification({ message: '', type: '' })
-          }, 2000)
         })
     }
   }
 
+  const resetNotificationHandler = () => {
+    setNotification({ message: '', type: '' })
+  }
   return (
     <div>
       <h2>Phonebook</h2>
@@ -111,6 +106,7 @@ const App = () => {
         <Notification
           message={notification.message}
           notificationType={notification.type}
+          resetNotification={resetNotificationHandler}
         />
       )}
       <Filter onChange={nameFilterHandler} />
