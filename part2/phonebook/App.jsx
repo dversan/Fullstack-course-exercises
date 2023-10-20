@@ -28,8 +28,8 @@ const App = () => {
     setPersonsFiltered(
       e.target.value !== ''
         ? persons.filter((p) =>
-          p.name.toLowerCase().includes(e.target.value.toLowerCase())
-        )
+            p.name.toLowerCase().includes(e.target.value.toLowerCase())
+          )
         : []
     )
   }
@@ -55,10 +55,10 @@ const App = () => {
       personsApi
         .update(selectedPersonId, { name: newName, number: newNumber })
         .then(updatePersons)
-        .catch(() =>
+        .finally(() =>
           setNotification({
-            message: `Information of ${newName} has already been removed from server`,
-            type: 'warning'
+            message: `${newName} has been updated`,
+            type: 'success'
           })
         )
     }
@@ -87,8 +87,20 @@ const App = () => {
   }
 
   const deletePersonClickHandler = (person) => {
-    if (window.confirm(`Delete ${person.name}`)) {
-      personsApi.remove(person.id).then(updatePersons)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsApi
+        .remove(person.id)
+        .then(updatePersons)
+        .finally(() => {
+          setNotification({
+            message: `${person.name} has been removed`,
+            type: 'warning'
+          })
+
+          setTimeout(() => {
+            setNotification({ message: '', type: '' })
+          }, 2000)
+        })
     }
   }
 
