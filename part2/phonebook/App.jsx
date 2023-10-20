@@ -72,6 +72,8 @@ const App = () => {
 
     if (nameAlreadyExists()) {
       updatePerson()
+    } else if (newName === '' || newNumber === '') {
+      setNotification({ message: 'Content is missing', type: 'warning' })
     } else {
       personsApi
         .create({ name: newName, number: newNumber })
