@@ -78,8 +78,11 @@ const App = () => {
       personsApi
         .create({ name: newName, number: newNumber })
         .then(updatePersons)
-        .finally(() => {
-          setNotification({ message: `Added ${newName}`, type: 'success' })
+        .catch((error) => {
+          setNotification({
+            message: error.response.data.error,
+            type: 'warning'
+          })
         })
     }
   }
