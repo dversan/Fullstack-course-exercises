@@ -97,6 +97,7 @@ const App = () => {
               }
             />
           </form>
+          <h2>{'blogs list'}</h2>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
