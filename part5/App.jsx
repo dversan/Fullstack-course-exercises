@@ -3,12 +3,14 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login.js'
 import LoginForm from './components/LoginForm'
+import CreateBlogForm from './components/CreateBlogForm.jsx'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
@@ -50,6 +52,20 @@ const App = () => {
     setUser(null)
   }
 
+  const handleBolgCreationSubmit = (event) => {
+    event.preventDefault()
+    try {
+      blogService.setToken(user.token)
+      blogService.create(newBlog)
+      setNewBlog({ title: '', author: '', url: '' })
+    } catch (exception) {
+      setErrorMessage('Something went wrong. Blog has not been created')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   return (
     <>
       {user !== null && (
@@ -65,6 +81,22 @@ const App = () => {
           >
             Logout
           </button>
+          <form onSubmit={handleBolgCreationSubmit}>
+            <CreateBlogForm
+              author={newBlog.author}
+              title={newBlog.title}
+              url={newBlog.url}
+              onChangeAuthor={(e) =>
+                setNewBlog({ ...newBlog, author: e.target.value })
+              }
+              onChangeTitle={(e) =>
+                setNewBlog({ ...newBlog, title: e.target.value })
+              }
+              onChangeUrl={(e) =>
+                setNewBlog({ ...newBlog, url: e.target.value })
+              }
+            />
+          </form>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
@@ -72,7 +104,6 @@ const App = () => {
       )}
       {user === null && (
         <>
-          <h2>Log in to application</h2>
           <form onSubmit={handleLogin}>
             <LoginForm
               username={username}

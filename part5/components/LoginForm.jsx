@@ -6,27 +6,28 @@ const LoginForm = ({
 }) => {
   return (
     <div>
+      <h2>{'Log in to application'}</h2>
       <div style={{ marginBottom: '10px' }}>
-        username
+        {'username'}
         <input
           style={{ marginLeft: '5px' }}
-          type='text'
+          type={'text'}
           value={username}
-          name='Username'
+          name={'Username'}
           onChange={onChangeUsername}
         />
       </div>
       <div style={{ marginBottom: '10px' }}>
-        password
+        {'password'}
         <input
           style={{ marginLeft: '5px' }}
-          type='password'
+          type={'password'}
           value={password}
-          name='Password'
+          name={'Password'}
           onChange={onChangePassword}
         />
       </div>
-      <button type='submit'>login</button>
+      <button type='submit'>{'login'}</button>
     </div>
   )
 }
