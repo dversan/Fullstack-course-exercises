@@ -8,7 +8,6 @@ const CreateBlogForm = ({
 }) => {
   return (
     <>
-      <h2>{'create new'}</h2>
       <div style={{ marginBottom: '5px' }}>
         {'title'}
         <input
@@ -16,6 +15,7 @@ const CreateBlogForm = ({
           value={title}
           name={'title'}
           onChange={onChangeTitle}
+          required
         />
       </div>
       <div style={{ marginBottom: '5px' }}>
@@ -25,12 +25,19 @@ const CreateBlogForm = ({
           value={author}
           name={'author'}
           onChange={onChangeAuthor}
+          required
         />
       </div>
 
       <div style={{ marginBottom: '10px' }}>
         {'url'}
-        <input type={'text'} value={url} name={'url'} onChange={onChangeUrl} />
+        <input
+          type={'text'}
+          value={url}
+          name={'url'}
+          onChange={onChangeUrl}
+          required
+        />
       </div>
       <button type={'submit'} style={{ marginBottom: '10px' }}>
         {'create blog'}

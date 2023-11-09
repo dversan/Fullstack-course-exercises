@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login.js'
 import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm.jsx'
+import Notification from './components/Notification/Notification.jsx'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,7 +12,10 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState({
+    message: '',
+    type: ''
+  })
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -40,10 +44,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      setNotification({
+        message: 'Wrong username or password',
+        type: 'warning'
+      })
     }
   }
 
@@ -56,14 +60,22 @@ const App = () => {
     event.preventDefault()
     try {
       blogService.setToken(user.token)
-      blogService.create(newBlog)
+      blogService.create(newBlog).then((res) => blogs.push(res))
+      setNotification({
+        type: 'success',
+        message: `A new blog ${newBlog.title} by ${newBlog.author} added`
+      })
       setNewBlog({ title: '', author: '', url: '' })
     } catch (exception) {
-      setErrorMessage('Something went wrong. Blog has not been created')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      setNotification({
+        message: 'Something went wrong. Blog has not been created',
+        type: 'warning'
+      })
     }
+  }
+
+  const resetNotificationHandler = () => {
+    setNotification({ message: '', type: '' })
   }
 
   return (
@@ -71,6 +83,13 @@ const App = () => {
       {user !== null && (
         <div>
           <h2>blogs</h2>
+          {notification.message && (
+            <Notification
+              message={notification.message}
+              notificationType={notification.type}
+              resetNotification={resetNotificationHandler}
+            />
+          )}
           <div
             style={{ marginBottom: '5px' }}
           >{`${user.username} is logged in`}</div>
@@ -81,6 +100,7 @@ const App = () => {
           >
             Logout
           </button>
+          <h2>{'create new'}</h2>
           <form onSubmit={handleBolgCreationSubmit}>
             <CreateBlogForm
               author={newBlog.author}
@@ -105,6 +125,14 @@ const App = () => {
       )}
       {user === null && (
         <>
+          <h2>{'Log in to application'}</h2>
+          {notification.message && (
+            <Notification
+              message={notification.message}
+              notificationType={notification.type}
+              resetNotification={resetNotificationHandler}
+            />
+          )}
           <form onSubmit={handleLogin}>
             <LoginForm
               username={username}

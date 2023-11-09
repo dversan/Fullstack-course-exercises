@@ -6,7 +6,6 @@ const LoginForm = ({
 }) => {
   return (
     <div>
-      <h2>{'Log in to application'}</h2>
       <div style={{ marginBottom: '10px' }}>
         {'username'}
         <input
