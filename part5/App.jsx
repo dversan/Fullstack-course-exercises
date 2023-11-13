@@ -80,6 +80,12 @@ const App = () => {
     setNotification({ message: '', type: '' })
   }
 
+  const removeBlog = (blogToDeleteId) => {
+    const blogsUpdated = blogs.filter((blog) => blog.id !== blogToDeleteId)
+
+    setBlogs(blogsUpdated)
+  }
+
   return (
     <>
       {user !== null && (
@@ -104,11 +110,19 @@ const App = () => {
             Logout
           </button>
           <ToggleButton buttonLabel={'Create blog'} ref={createBlogFormRef}>
-            <CreateBlogForm createNewBlog={createBlog} />
+            <CreateBlogForm
+              createNewBlog={createBlog}
+              initialFormValues={{ title: '', author: '', url: '' }}
+            />
           </ToggleButton>
           <h2>{'blogs list'}</h2>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} user={user} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              user={user}
+              onRemoveBlog={removeBlog}
+            />
           ))}
         </div>
       )}

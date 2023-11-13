@@ -1,24 +1,23 @@
 import { useState } from 'react'
 
-const CreateBlogForm = ({ title, author, url, createNewBlog }) => {
+const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
 
   const handleBolgCreationSubmit = (event) => {
     event.preventDefault()
     createNewBlog(newBlog)
-    setNewBlog({ title: '', author: '', url: '' })
+    setNewBlog(initialFormValues)
   }
 
   return (
     <>
-      {' '}
       <h2>{'create new'}</h2>
       <form onSubmit={handleBolgCreationSubmit}>
         <div style={{ marginBottom: '5px' }}>
           {'title'}
           <input
             type={'text'}
-            value={title}
+            value={newBlog.title}
             name={'title'}
             onChange={(e) => {
               setNewBlog({ ...newBlog, title: e.target.value })
@@ -30,7 +29,7 @@ const CreateBlogForm = ({ title, author, url, createNewBlog }) => {
           {'author'}
           <input
             type={'text'}
-            value={author}
+            value={newBlog.author}
             name={'author'}
             onChange={(e) => {
               setNewBlog({ ...newBlog, author: e.target.value })
@@ -43,7 +42,7 @@ const CreateBlogForm = ({ title, author, url, createNewBlog }) => {
           {'url'}
           <input
             type={'text'}
-            value={url}
+            value={newBlog.url}
             name={'url'}
             onChange={(e) => {
               setNewBlog({ ...newBlog, url: e.target.value })

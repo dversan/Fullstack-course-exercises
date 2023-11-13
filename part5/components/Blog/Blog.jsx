@@ -2,9 +2,11 @@ import { useState } from 'react'
 import styles from './blog.module.css'
 import blogService from '../../services/blogs.js'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, onRemoveBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
+  const isAuthUser = blog.user.id === user.id
+
   const blogToUpdate = {
     user: user.id,
     likes,
@@ -26,6 +28,13 @@ const Blog = ({ blog, user }) => {
     await blogService.update(blog.id, updatedBlog)
   }
 
+  const removeBlogHandler = async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      await blogService.remove(blog.id)
+      onRemoveBlog(blog.id)
+    }
+  }
+
   return (
     <div className={styles.blogStyle}>
       <div className={styles.blogHeader}>
@@ -44,6 +53,11 @@ const Blog = ({ blog, user }) => {
             </button>
           </div>
           <div> {user.username}</div>
+          {isAuthUser && (
+            <button type={'button'} onClick={removeBlogHandler}>
+              {'remove'}
+            </button>
+          )}
         </div>
       )}
     </div>
