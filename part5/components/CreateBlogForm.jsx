@@ -16,6 +16,7 @@ const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
         <div style={{ marginBottom: '5px' }}>
           {'title'}
           <input
+            data-testid={'title'}
             type={'text'}
             value={newBlog.title}
             name={'title'}
@@ -28,6 +29,7 @@ const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
         <div style={{ marginBottom: '5px' }}>
           {'author'}
           <input
+            data-testid={'author'}
             type={'text'}
             value={newBlog.author}
             name={'author'}
@@ -41,6 +43,7 @@ const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
         <div style={{ marginBottom: '10px' }}>
           {'url'}
           <input
+            data-testid={'url'}
             type={'text'}
             value={newBlog.url}
             name={'url'}
@@ -51,7 +54,7 @@ const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
           />
         </div>
         <button type={'submit'} style={{ marginBottom: '10px' }}>
-          {'create blog'}
+          {'save'}
         </button>
       </form>
     </>

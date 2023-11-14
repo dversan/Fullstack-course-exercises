@@ -3,7 +3,8 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    jest: true
+    jest: true,
+    'cypress/globals': true
   },
   extends: [
     'standard',
@@ -30,7 +31,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['react', 'react-refresh'],
+  plugins: ['react', 'react-refresh', 'jest', 'cypress'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',

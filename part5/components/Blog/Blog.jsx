@@ -36,7 +36,7 @@ const Blog = ({ blog, user, onRemoveBlog }) => {
   }
 
   return (
-    <div className={styles.blogStyle}>
+    <div className={styles.blog}>
       <div className={styles.blogHeader}>
         <div>{`${blog.title} - ${blog.author}`}</div>
         <button type={'button'} onClick={handleShowDetails}>
