@@ -103,7 +103,7 @@ const App = () => {
             style={{ marginBottom: '5px' }}
           >{`${user.username} is logged in`}</div>
           <button
-            type={'reset'}
+            type={'button'}
             style={{ marginBottom: '10px' }}
             onClick={handleLogout}
           >
