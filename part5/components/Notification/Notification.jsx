@@ -9,6 +9,7 @@ const Notification = ({ message, notificationType, resetNotification }) => {
 
   return (
     <div
+      id={'loginErrorMessage'}
       className={
         notificationType === 'success' ? styles.success : styles.warning
       }

@@ -12,6 +12,7 @@ const LoginForm = ({
         <div style={{ marginBottom: '10px' }}>
           {'username'}
           <input
+            id={'username'}
             style={{ marginLeft: '5px' }}
             type={'text'}
             value={username}
@@ -22,6 +23,7 @@ const LoginForm = ({
         <div style={{ marginBottom: '10px' }}>
           {'password'}
           <input
+            id={'password'}
             style={{ marginLeft: '5px' }}
             type={'password'}
             value={password}
