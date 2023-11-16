@@ -80,8 +80,8 @@ const App = () => {
     setNotification({ message: '', type: '' })
   }
 
-  const removeBlog = (blogToDeleteId) => {
-    const blogsUpdated = blogs.filter((blog) => blog.id !== blogToDeleteId)
+  const removeBlog = (blogToRemove) => {
+    const blogsUpdated = blogs.filter((blog) => blog.id !== blogToRemove)
 
     setBlogs(blogsUpdated)
   }

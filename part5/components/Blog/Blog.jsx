@@ -36,7 +36,7 @@ const Blog = ({ blog, user, onRemoveBlog }) => {
   }
 
   return (
-    <div className={styles.blog}>
+    <div id={'blogContainer'} className={styles.blog}>
       <div className={styles.blogHeader}>
         <div>{`${blog.title} - ${blog.author}`}</div>
         <button type={'button'} onClick={handleShowDetails}>
@@ -47,7 +47,7 @@ const Blog = ({ blog, user, onRemoveBlog }) => {
         <div>
           <div>{blog.url}</div>
           <div>
-            <div>{likes}</div>
+            <div id={'likesCount'}>{likes}</div>
             <button type={'button'} onClick={handleLikesCount}>
               {'likes'}
             </button>

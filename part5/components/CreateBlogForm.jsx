@@ -16,10 +16,10 @@ const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
         <div style={{ marginBottom: '5px' }}>
           {'title'}
           <input
-            data-testid={'title'}
+            id={'title'}
+            aria-label={'title'}
             type={'text'}
             value={newBlog.title}
-            name={'title'}
             onChange={(e) => {
               setNewBlog({ ...newBlog, title: e.target.value })
             }}
@@ -29,10 +29,10 @@ const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
         <div style={{ marginBottom: '5px' }}>
           {'author'}
           <input
-            data-testid={'author'}
+            id={'author'}
+            aria-label={'author'}
             type={'text'}
             value={newBlog.author}
-            name={'author'}
             onChange={(e) => {
               setNewBlog({ ...newBlog, author: e.target.value })
             }}
@@ -43,10 +43,10 @@ const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
         <div style={{ marginBottom: '10px' }}>
           {'url'}
           <input
-            data-testid={'url'}
+            id={'url'}
+            aria-label={'url'}
             type={'text'}
             value={newBlog.url}
-            name={'url'}
             onChange={(e) => {
               setNewBlog({ ...newBlog, url: e.target.value })
             }}

@@ -20,9 +20,9 @@ describe('CreateBlogForm tests', () => {
       />
     )
 
-    const titleInput = screen.getByTestId('title')
-    const authorInput = screen.getByTestId('author')
-    const urlInput = screen.getByTestId('url')
+    const titleInput = screen.getByLabelText('title')
+    const authorInput = screen.getByLabelText('author')
+    const urlInput = screen.getByLabelText('url')
 
     fireEvent.change(titleInput, { target: { value: sampleNewBlog.title } })
     fireEvent.change(authorInput, { target: { value: sampleNewBlog.author } })
