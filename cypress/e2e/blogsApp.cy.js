@@ -1,4 +1,7 @@
-import { sampleNewBlog } from '../../part5/doubles/testSamples.jsx'
+import {
+  sampleGetBlogsResponse,
+  sampleNewBlog
+} from '../../part5/doubles/testSamples.jsx'
 
 describe('Blog app', () => {
   beforeEach(() => {
@@ -69,6 +72,24 @@ describe('Blog app', () => {
       cy.login({ username: 'dvs', password: '123asd' })
 
       cy.contains('details').click()
+    })
+
+    it('the blogs are ordered according to likes with the blog with the most likes being first', () => {
+      cy.intercept('GET', 'http://localhost:3003/api/blogs', (req) => {
+        req.reply({ body: sampleGetBlogsResponse })
+      }).as('getBlogs')
+
+      cy.wait('@getBlogs').then(() => {
+        cy.get('#blogsList')
+          .children()
+          .first()
+          .contains('Blog with more likes - Tester')
+
+        cy.get('#blogsList')
+          .children()
+          .last()
+          .contains('Blog with less likes - Tester')
+      })
     })
   })
 })

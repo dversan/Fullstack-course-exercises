@@ -20,11 +20,8 @@ const App = () => {
 
   useEffect(() => {
     const sortedBlogs = (blogs) => blogs.sort((a, b) => b.likes - a.likes)
-
     blogService.getAll().then((blogsInDb) => setBlogs(sortedBlogs(blogsInDb)))
-  }, [])
 
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -116,14 +113,16 @@ const App = () => {
             />
           </ToggleButton>
           <h2>{'blogs list'}</h2>
-          {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              user={user}
-              onRemoveBlog={removeBlog}
-            />
-          ))}
+          <div id={'blogsList'}>
+            {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                user={user}
+                onRemoveBlog={removeBlog}
+              />
+            ))}
+          </div>
         </div>
       )}
       {user === null && (
