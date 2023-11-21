@@ -13,16 +13,16 @@ const reset = createAction('ZERO')
 
 const counterReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(incrementGood, (state, action) => {
+    .addCase(incrementGood, (state) => {
       state.good++
     })
-    .addCase(incrementOk, (state, action) => {
+    .addCase(incrementOk, (state) => {
       state.ok++
     })
-    .addCase(incrementBad, (state, action) => {
+    .addCase(incrementBad, (state) => {
       state.bad++
     })
-    .addCase(reset, (state, action) => {
+    .addCase(reset, (state) => {
       state.good = 0
       state.bad = 0
       state.ok = 0
