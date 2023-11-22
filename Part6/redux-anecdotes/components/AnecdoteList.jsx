@@ -5,6 +5,10 @@ import {
   sortAnecdotes,
   votesIncrement
 } from '../reducers/anecdoteReducer.js'
+import {
+  resetNotificationContent,
+  setNotificationContent
+} from '../reducers/notificationReducer.js'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
@@ -13,11 +17,18 @@ const AnecdoteList = () => {
 
   useEffect(() => {
     dispatch(sortAnecdotes())
-  }, [])
+  }, [anecdotes.length])
 
   useEffect(() => {
     dispatch(applyFilterAnecdotes(filter))
   }, [filter])
+
+  const votingAnecdoteHandler = (anecdote) => {
+    dispatch(votesIncrement(anecdote.id))
+    dispatch(setNotificationContent(`You voted ${anecdote.content}`))
+
+    setTimeout(() => dispatch(resetNotificationContent()), 5000)
+  }
 
   return (
     <>
@@ -26,7 +37,7 @@ const AnecdoteList = () => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => dispatch(votesIncrement(anecdote.id))}>
+            <button onClick={() => votingAnecdoteHandler(anecdote)}>
               vote
             </button>
           </div>
