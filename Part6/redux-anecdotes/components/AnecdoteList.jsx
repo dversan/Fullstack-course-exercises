@@ -1,10 +1,6 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import {
-  applyFilterAnecdotes,
-  sortAnecdotes,
-  votesIncrement
-} from '../reducers/anecdoteReducer.js'
+import { sortAnecdotes, votesIncrement } from '../reducers/anecdoteReducer.js'
 import {
   resetNotificationContent,
   setNotificationContent
@@ -13,15 +9,10 @@ import {
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector((state) => state.anecdotes)
-  const filter = useSelector((state) => state.filter)
 
   useEffect(() => {
     dispatch(sortAnecdotes())
   }, [anecdotes.length])
-
-  useEffect(() => {
-    dispatch(applyFilterAnecdotes(filter))
-  }, [filter])
 
   const votingAnecdoteHandler = (anecdote) => {
     dispatch(votesIncrement(anecdote.id))

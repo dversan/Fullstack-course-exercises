@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { filterAnecdotes } from '../reducers/filterReducer.js'
+import { applyFilterAnecdotes } from '../reducers/anecdoteReducer'
 
 const AnecdotesFilter = () => {
   const dispatch = useDispatch()
@@ -7,14 +7,15 @@ const AnecdotesFilter = () => {
   const handleChange = (event) => {
     const inputValue = event.target.value
     event.preventDefault()
-
-    return inputValue !== '' ? event.target.value : 'ALL'
+    dispatch(
+      applyFilterAnecdotes(inputValue !== '' ? event.target.value : 'ALL')
+    )
   }
 
   return (
     <div style={{ marginBottom: 10 }}>
       filter
-      <input onChange={(e) => dispatch(filterAnecdotes(handleChange(e)))} />
+      <input onChange={(e) => handleChange(e)} />
     </div>
   )
 }
