@@ -3,11 +3,16 @@ import { useEffect } from 'react'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector((state) => state)
+  const anecdotes = useSelector((state) => state.anecdotes)
+  const filter = useSelector((state) => state.filter)
 
   useEffect(() => {
     dispatch({ type: 'SORT' })
   }, [])
+
+  useEffect(() => {
+    dispatch({ type: 'FILTER', payload: filter })
+  }, [filter])
 
   const addVote = (id) => {
     return {

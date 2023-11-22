@@ -24,6 +24,7 @@ const initialState = anecdotesAtStart.map(asObject)
 const votesIncrement = createAction('VOTE')
 const createAnecdote = createAction('ANECDOTE')
 const sortAnecdotes = createAction('SORT')
+const filterAnecdotes = createAction('FILTER')
 
 const reducer = createReducer(initialState, (builder) => {
   builder
@@ -45,6 +46,15 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(sortAnecdotes, (state) => {
       state.sort((a, b) => b.votes - a.votes)
+    })
+    .addCase(filterAnecdotes, (state, action) => {
+      if (action.payload === 'ALL') {
+        return initialState
+      } else {
+        return state.filter((anecdote) =>
+          anecdote.content.includes(action.payload)
+        )
+      }
     })
 })
 
