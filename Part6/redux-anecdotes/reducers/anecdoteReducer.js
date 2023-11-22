@@ -1,4 +1,4 @@
-import { createAction, createReducer } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -21,33 +21,30 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const votesIncrement = createAction('VOTE')
-const createAnecdote = createAction('ANECDOTE')
-const sortAnecdotes = createAction('SORT')
-const filterAnecdotes = createAction('FILTER')
-
-const reducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(votesIncrement, (state, action) => {
-      const anecdoteId = action.payload.id
+const anecdotesSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    votesIncrement(state, action) {
+      const anecdoteId = action.payload
 
       const anecdoteIndex = state.findIndex(
         (anecdote) => anecdote.id === anecdoteId
       )
 
       state[anecdoteIndex].votes++
-    })
-    .addCase(createAnecdote, (state, action) => {
-      const anecdoteContent = action.payload.content
+    },
+    createNewAnecdote(state, action) {
+      const anecdoteContent = action.payload
 
       const newAnecdote = asObject(anecdoteContent)
 
       state.push(newAnecdote)
-    })
-    .addCase(sortAnecdotes, (state) => {
+    },
+    sortAnecdotes(state) {
       state.sort((a, b) => b.votes - a.votes)
-    })
-    .addCase(filterAnecdotes, (state, action) => {
+    },
+    applyFilterAnecdotes(state, action) {
       if (action.payload === 'ALL') {
         return initialState
       } else {
@@ -55,7 +52,14 @@ const reducer = createReducer(initialState, (builder) => {
           anecdote.content.includes(action.payload)
         )
       }
-    })
+    }
+  }
 })
 
-export default reducer
+export default anecdotesSlice.reducer
+export const {
+  votesIncrement,
+  applyFilterAnecdotes,
+  sortAnecdotes,
+  createNewAnecdote
+} = anecdotesSlice.actions
