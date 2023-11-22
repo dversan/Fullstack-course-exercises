@@ -45,6 +45,7 @@ module.exports = {
     'object-curly-spacing': ['error', 'always'],
     'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 'off',
-    'no-unused-vars': 'off'
+    'no-unused-vars': 'off',
+    'space-before-function-paren': 'off'
   }
 }
