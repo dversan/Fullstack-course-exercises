@@ -1,6 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { applyFilterAnecdotes, setAnecdotes } from '../reducers/anecdoteReducer'
-import serviceAnecdotes from '../services/anecdotes.js'
+import { useDispatch } from 'react-redux'
+import {
+  applyFilterAnecdotes,
+  initializeAnecdotes
+} from '../reducers/anecdoteReducer'
 
 const AnecdotesFilter = () => {
   const dispatch = useDispatch()
@@ -11,9 +13,7 @@ const AnecdotesFilter = () => {
     if (inputValue) {
       dispatch(applyFilterAnecdotes(event.target.value))
     } else {
-      serviceAnecdotes
-        .getAll()
-        .then((anecdotesInDb) => dispatch(setAnecdotes(anecdotesInDb)))
+      dispatch(initializeAnecdotes())
     }
   }
 
