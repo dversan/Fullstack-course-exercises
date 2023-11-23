@@ -15,7 +15,7 @@ const AnecdotesFilter = () => {
   return (
     <div style={{ marginBottom: 10 }}>
       filter
-      <input onChange={(e) => handleChange(e)} />
+      <input onChange={handleChange} />
     </div>
   )
 }
