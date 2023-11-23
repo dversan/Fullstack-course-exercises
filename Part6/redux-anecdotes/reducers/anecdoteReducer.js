@@ -66,4 +66,19 @@ export const createAnecdote = (anecdote) => {
   }
 }
 
+export const voteAnecdote = (anecdote) => {
+  return async (dispatch) => {
+    await anecdotesService.update(anecdote.id, {
+      ...anecdote,
+      votes: anecdote.votes + 1
+    })
+
+    dispatch(votesIncrement(anecdote.id))
+
+    dispatch(setNotificationContent(`You voted ${anecdote.content}`))
+
+    setTimeout(() => dispatch(resetNotificationContent()), 5000)
+  }
+}
+
 export default anecdotesSlice.reducer
