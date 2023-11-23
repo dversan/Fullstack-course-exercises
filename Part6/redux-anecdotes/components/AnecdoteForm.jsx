@@ -4,18 +4,24 @@ import {
   resetNotificationContent,
   setNotificationContent
 } from '../reducers/notificationReducer.js'
+import anecdotesService from '../services/anecdotes.js'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
   const createAnecdote = (e) => {
     e.preventDefault()
-    const anecdoteContent = e.target.anecdoteContent.value
+    const anecdoteBody = { content: e.target.anecdoteContent.value, votes: 0 }
     e.target.anecdoteContent.value = ''
 
-    dispatch(createNewAnecdote(anecdoteContent))
+    anecdotesService
+      .create(anecdoteBody)
+      .then((anecdote) => dispatch(createNewAnecdote(anecdote)))
+
     dispatch(
-      setNotificationContent(`New anecdote ${anecdoteContent} has been created`)
+      setNotificationContent(
+        `New anecdote ${anecdoteBody.content} has been created`
+      )
     )
 
     setTimeout(() => dispatch(resetNotificationContent()), 5000)

@@ -9,7 +9,8 @@
     "lint": "eslint part1 --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "server": "json-server -p3001 --watch db.json"
   },
   "testEnvironment": "jsdom",
   "dependencies": {
