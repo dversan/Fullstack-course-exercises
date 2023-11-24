@@ -2,16 +2,26 @@ import AnecdoteForm from './components/AnecdoteForm.jsx'
 import AnecdoteList from './components/AnecdoteList.jsx'
 import AnecdotesFilter from './components/AnecdotesFilter.jsx'
 import Notification from './components/Notification.jsx'
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { initializeAnecdotes } from './reducers/anecdoteReducer.js'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 
 const App = () => {
-  const dispatch = useDispatch()
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['anecdotes'],
+    queryFn: () =>
+      axios.get('http://localhost:3001/anecdotes').then((res) => res.data),
+    retry: 1
+  })
 
-  useEffect(() => {
-    dispatch(initializeAnecdotes())
-  }, [])
+  if (isPending) {
+    return <div>loading data...</div>
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>
+  }
+
+  console.log(data)
 
   return (
     <div>
