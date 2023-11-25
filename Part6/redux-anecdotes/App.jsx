@@ -6,7 +6,12 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
 const App = () => {
-  const { isPending, isError, data, error } = useQuery({
+  const {
+    isPending,
+    isError,
+    data: anecdotes,
+    error
+  } = useQuery({
     queryKey: ['anecdotes'],
     queryFn: () =>
       axios.get('http://localhost:3001/anecdotes').then((res) => res.data),
@@ -21,14 +26,12 @@ const App = () => {
     return <div>Error: {error.message}</div>
   }
 
-  console.log(data)
-
   return (
     <div>
       <h2>Anecdotes</h2>
       <Notification />
       <AnecdotesFilter />
-      <AnecdoteList />
+      <AnecdoteList anecdotes={anecdotes} />
       <AnecdoteForm />
     </div>
   )
