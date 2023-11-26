@@ -1,16 +1,30 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { sortAnecdotes, voteAnecdote } from '../reducers/anecdoteReducer.js'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import anecdotesService from '../services/anecdotes.js'
 
 const AnecdoteList = ({ anecdotes }) => {
-  const dispatch = useDispatch()
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    dispatch(sortAnecdotes())
-  }, [])
+  const updatedAnecdoteMutation = useMutation({
+    mutationFn: anecdotesService.update,
+    onSuccess: (updatedAnecdote) => {
+      queryClient.setQueryData(
+        ['anecdotes'],
+        anecdotes.map((anecdote) =>
+          anecdote.id === updatedAnecdote.id
+            ? {
+                ...anecdote,
+                votes: anecdote.votes + 1,
+                content: anecdote.content
+              }
+            : anecdote
+        )
+      )
+    }
+  })
 
   const votingAnecdoteHandler = (anecdote) => {
-    dispatch(voteAnecdote(anecdote))
+    const anecdoteId = anecdote.id
+    updatedAnecdoteMutation.mutate(anecdoteId, anecdote)
   }
 
   return (

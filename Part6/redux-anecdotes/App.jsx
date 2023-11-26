@@ -31,7 +31,7 @@ const App = () => {
       <h2>Anecdotes</h2>
       <Notification />
       <AnecdotesFilter />
-      <AnecdoteList anecdotes={anecdotes} />
+      <AnecdoteList anecdotes={anecdotes.sort((a, b) => b.votes - a.votes)} />
       <AnecdoteForm />
     </div>
   )
