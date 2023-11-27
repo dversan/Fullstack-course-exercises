@@ -20,5 +20,41 @@
       "number": "44342423423",
       "id": 8
     }
+  ],
+  "anecdotes": [
+    {
+      "content": "If it hurts, do it more often",
+      "id": "10819",
+      "votes": 1
+    },
+    {
+      "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
+      "id": "60476",
+      "votes": 2
+    },
+    {
+      "content": "fadsfafadsfasdfasdfasdfasdfasdfa",
+      "votes": 0,
+      "id": "EuWzymK"
+    },
+    {
+      "content": "Probando probando",
+      "id": "j5_ey9X",
+      "votes": null
+    },
+    {
+      "id": "rb1hxOu"
+    },
+    {
+      "id": "MzxiUIl"
+    },
+    {
+      "id": "BKq3KT5"
+    },
+    {
+      "content": "fadsfafadsfasdfasdfasdfasdfasdfa",
+      "votes": 0,
+      "id": "EoFyRIe"
+    }
   ]
 }
