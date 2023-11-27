@@ -3,11 +3,13 @@ import { createContext, useReducer } from 'react'
 export const notificationReducer = (state, action) => {
   switch (action.type) {
     case 'create':
-      return `New anecdote ${action.payload} has been created`
+      return action.payload
     case 'vote':
-      return `You voted ${action.payload}`
+      return action.payload
     case 'reset':
       return null
+    case 'error':
+      return 'too short anecdote, must have length 5 or more '
   }
 }
 
