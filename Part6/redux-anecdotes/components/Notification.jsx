@@ -1,7 +1,8 @@
-import { useSelector } from 'react-redux'
+import { useContext } from 'react'
+import AnecdotesContext from '../AnecdotesContext.jsx'
 
 const Notification = () => {
-  const notification = useSelector((state) => state.notification)
+  const [notification] = useContext(AnecdotesContext)
 
   const style = {
     border: 'solid',

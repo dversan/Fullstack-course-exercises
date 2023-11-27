@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import anecdotesService from '../services/anecdotes.js'
-import { showNotification } from './notificationReducer.js'
 
 const anecdotesSlice = createSlice({
   name: 'anecdotes',
@@ -47,32 +46,32 @@ export const initializeAnecdotes = () => {
   }
 }
 
-export const createAnecdote = (anecdote) => {
-  return async (dispatch) => {
-    const newAnecdote = await anecdotesService.create(anecdote)
-
-    dispatch(createNewAnecdote(newAnecdote))
-
-    dispatch(
-      showNotification(
-        `New anecdote ${newAnecdote.content} has been created`,
-        5000
-      )
-    )
-  }
-}
-
-export const voteAnecdote = (anecdote) => {
-  return async (dispatch) => {
-    await anecdotesService.update(anecdote.id, {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    })
-
-    dispatch(votesIncrement(anecdote.id))
-
-    dispatch(showNotification(`You voted ${anecdote.content}`, 5000))
-  }
-}
+// export const createAnecdote = (anecdote) => {
+//   return async (dispatch) => {
+//     const newAnecdote = await anecdotesService.create(anecdote)
+//
+//     dispatch(createNewAnecdote(newAnecdote))
+//
+//     dispatch(
+//       showNotification(
+//         `New anecdote ${newAnecdote.content} has been created`,
+//         5000
+//       )
+//     )
+//   }
+// }
+//
+// export const voteAnecdote = (anecdote) => {
+//   return async (dispatch) => {
+//     await anecdotesService.update(anecdote.id, {
+//       ...anecdote,
+//       votes: anecdote.votes + 1
+//     })
+//
+//     dispatch(votesIncrement(anecdote.id))
+//
+//     dispatch(showNotification(`You voted ${anecdote.content}`, 5000))
+//   }
+// }
 
 export default anecdotesSlice.reducer

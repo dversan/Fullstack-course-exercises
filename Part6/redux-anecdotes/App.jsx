@@ -4,6 +4,7 @@ import AnecdotesFilter from './components/AnecdotesFilter.jsx'
 import Notification from './components/Notification.jsx'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { AnecdotesContextProvider } from './AnecdotesContext.jsx'
 
 const App = () => {
   const {
@@ -27,13 +28,15 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>Anecdotes</h2>
-      <Notification />
-      <AnecdotesFilter />
-      <AnecdoteList anecdotes={anecdotes.sort((a, b) => b.votes - a.votes)} />
-      <AnecdoteForm />
-    </div>
+    <>
+      <AnecdotesContextProvider>
+        <h2>Anecdotes</h2>
+        <Notification />
+        <AnecdotesFilter />
+        <AnecdoteList anecdotes={anecdotes.sort((a, b) => b.votes - a.votes)} />
+        <AnecdoteForm />
+      </AnecdotesContextProvider>
+    </>
   )
 }
 
