@@ -19,6 +19,12 @@ const CreateAnecdoteForm = (props) => {
     navigate('/')
   }
 
+  const resetFields = () => {
+    contentField.onReset()
+    authorField.onReset()
+    infoField.onReset()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -49,6 +55,9 @@ const CreateAnecdoteForm = (props) => {
         </div>
         <button>create</button>
       </form>
+      <button style={{ marginTop: 5 }} onClick={resetFields}>
+        reset
+      </button>
     </div>
   )
 }
