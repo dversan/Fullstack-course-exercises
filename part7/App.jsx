@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Anecdotes from './components/Anecdotes.jsx'
-import CreateAnecdote from './components/CreateAnecdote.jsx'
+import CreateAnecdoteForm from './components/CreateAnecdoteForm.jsx'
 import Anecdote from './components/Anecdote.jsx'
 import Menu from './components/Menu.jsx'
 import Footer from './components/Footer.jsx'
@@ -32,7 +32,7 @@ const App = () => {
     setNotification(`A new anecdote ${anecdote.content} has been created!`)
     setTimeout(() => {
       setNotification('')
-    }, 2000)
+    }, 5000)
   }
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id)
@@ -63,7 +63,10 @@ const App = () => {
             <Anecdotes anecdotes={anecdotes} notification={notification} />
           }
         />
-        <Route path={'/create'} element={<CreateAnecdote addNew={addNew} />} />
+        <Route
+          path={'/create'}
+          element={<CreateAnecdoteForm addNew={addNew} />}
+        />
       </Routes>
       <Footer />
     </BrowserRouter>

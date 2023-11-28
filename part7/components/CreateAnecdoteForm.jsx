@@ -1,19 +1,19 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useField } from '../hooks/index.js'
 
-const CreateAnecdote = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+const CreateAnecdoteForm = (props) => {
+  const contentField = useField('text')
+  const authorField = useField('text')
+  const infoField = useField('text')
 
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: contentField.value,
+      author: authorField.value,
+      info: infoField.value,
       votes: 0
     })
     navigate('/')
@@ -27,24 +27,24 @@ const CreateAnecdote = (props) => {
           content
           <input
             name='content'
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={contentField.value}
+            onChange={(e) => contentField.onChange(e.target.value)}
           />
         </div>
         <div>
           author
           <input
             name='author'
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            value={authorField.value}
+            onChange={(e) => authorField.onChange(e.target.value)}
           />
         </div>
         <div>
           url for more info
           <input
             name='info'
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
+            value={infoField.value}
+            onChange={(e) => infoField.onChange(e.target.value)}
           />
         </div>
         <button>create</button>
@@ -53,4 +53,4 @@ const CreateAnecdote = (props) => {
   )
 }
 
-export default CreateAnecdote
+export default CreateAnecdoteForm
