@@ -1,60 +1,10 @@
 import { useState } from 'react'
-import { BrowserRouter, Link, Route, Routes, useParams } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Anecdotes from './components/Anecdotes.jsx'
 import CreateAnecdote from './components/CreateAnecdote.jsx'
 import Anecdote from './components/Anecdote.jsx'
-
-const Menu = () => {
-  const padding = {
-    paddingRight: 5
-  }
-  return (
-    <div>
-      <Link to={'/'} style={padding}>
-        anecdotes
-      </Link>
-      <Link to={'/create'} style={padding}>
-        create new
-      </Link>
-      <Link to={'/about'} style={padding}>
-        about
-      </Link>
-    </div>
-  )
-}
-
-const About = () => (
-  <div>
-    <h2>About anecdote app</h2>
-    <p>According to Wikipedia:</p>
-
-    <em>
-      An anecdote is a brief, revealing account of an individual person or an
-      incident. Occasionally humorous, anecdotes differ from jokes because their
-      primary purpose is not simply to provoke laughter but to reveal a truth
-      more general than the brief tale itself, such as to characterize a person
-      by delineating a specific quirk or trait, to communicate an abstract idea
-      about a person, place, or thing through the concrete details of a short
-      narrative. An anecdote is "a story with a point."
-    </em>
-
-    <p>
-      Software engineering is full of excellent anecdotes, at this app you can
-      find the best and add more.
-    </p>
-  </div>
-)
-
-const Footer = () => (
-  <div>
-    Anecdote app for <a href='https://fullstackopen.com/'>Full Stack Open</a>.
-    See{' '}
-    <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>
-      https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js
-    </a>{' '}
-    for the source code.
-  </div>
-)
+import Menu from './components/Menu.jsx'
+import Footer from './components/Footer.jsx'
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -79,6 +29,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`A new anecdote ${anecdote.content} has been created!`)
+    setTimeout(() => {
+      setNotification('')
+    }, 2000)
   }
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id)
@@ -103,9 +57,13 @@ const App = () => {
           path={'/anecdotes/:id'}
           element={<Anecdote anecdotes={anecdotes} />}
         />
-        <Route path={'/'} element={<Anecdotes anecdotes={anecdotes} />} />
+        <Route
+          path={'/'}
+          element={
+            <Anecdotes anecdotes={anecdotes} notification={notification} />
+          }
+        />
         <Route path={'/create'} element={<CreateAnecdote addNew={addNew} />} />
-        {/*<About />*/}
       </Routes>
       <Footer />
     </BrowserRouter>

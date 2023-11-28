@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
+import About from './About.jsx'
 
-const Anecdotes = ({ anecdotes }) => {
+const Anecdotes = ({ anecdotes, notification }) => {
   return (
     <div>
+      {notification}
       <h2>Anecdotes</h2>
       <ul>
         {anecdotes.map((anecdote) => (
@@ -11,6 +13,7 @@ const Anecdotes = ({ anecdotes }) => {
           </li>
         ))}
       </ul>
+      <About />
     </div>
   )
 }
