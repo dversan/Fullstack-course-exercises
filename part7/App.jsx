@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Link, Route, Routes, useParams } from 'react-router-dom'
 import Anecdotes from './components/Anecdotes.jsx'
-import CreateAnecdote from './components/createAnecdote.jsx'
+import CreateAnecdote from './components/CreateAnecdote.jsx'
+import Anecdote from './components/Anecdote.jsx'
 
 const Menu = () => {
   const padding = {
@@ -62,14 +63,14 @@ const App = () => {
       author: 'Jez Humble',
       info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
       votes: 0,
-      id: 1
+      id: '1'
     },
     {
       content: 'Premature optimization is the root of all evil',
       author: 'Donald Knuth',
       info: 'http://wiki.c2.com/?PrematureOptimization',
       votes: 0,
-      id: 2
+      id: '2'
     }
   ])
 
@@ -98,6 +99,10 @@ const App = () => {
       <h1>Software anecdotes</h1>
       <Menu />
       <Routes>
+        <Route
+          path={'/anecdotes/:id'}
+          element={<Anecdote anecdotes={anecdotes} />}
+        />
         <Route path={'/'} element={<Anecdotes anecdotes={anecdotes} />} />
         <Route path={'/create'} element={<CreateAnecdote addNew={addNew} />} />
         {/*<About />*/}
