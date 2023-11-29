@@ -19,6 +19,11 @@
       "name": "Marie",
       "number": "44342423423",
       "id": 8
+    },
+    {
+      "name": "Julianin",
+      "number": "424242424",
+      "id": 9
     }
   ],
   "anecdotes": [
@@ -55,6 +60,24 @@
       "content": "fadsfafadsfasdfasdfasdfasdfasdfa",
       "votes": 0,
       "id": "EoFyRIe"
+    }
+  ],
+  "notes": [
+    {
+      "id": 1,
+      "content": "custom-hooks are awesome!"
+    },
+    {
+      "id": 2,
+      "content": "best feature ever <3"
+    },
+    {
+      "content": "YEeeeeea",
+      "id": 3
+    },
+    {
+      "content": "Otraaaaaa",
+      "id": 4
     }
   ]
 }
