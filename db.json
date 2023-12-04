@@ -79,5 +79,23 @@
       "content": "Otraaaaaa",
       "id": 4
     }
+  ],
+  "blogs": [
+    {
+      "id": "654b9d83d3880fe68739d910",
+      "title": "Frist",
+      "author": "David",
+      "url": "www.yteeee.com",
+      "likes": 1,
+      "user": "654a564cac747f6b8d11dc1b"
+    },
+    {
+      "id": "654b9d83d3880fe68739d000",
+      "title": "Second",
+      "author": "David",
+      "url": "www.yteeee.com",
+      "likes": 2,
+      "user": "654a564cac747f6b8d11dc1b"
+    }
   ]
 }
