@@ -1,37 +1,20 @@
 import { useState } from 'react'
 import styles from './blog.module.css'
-import blogService from '../../services/blogs.js'
+import { useDispatch } from 'react-redux'
+import { addLike, deleteBlog } from '../../reducers/blogsReducer.js'
 
-const Blog = ({ blog, user, onRemoveBlog }) => {
+const Blog = ({ blog, user }) => {
   const [showDetails, setShowDetails] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
   const isAuthUser = blog.user.id === user.id
-
-  const blogToUpdate = {
-    user: user.id,
-    likes,
-    author: blog.author,
-    title: blog.title,
-    url: blog.url
-  }
+  const dispatch = useDispatch()
 
   const handleShowDetails = () => {
     setShowDetails(!showDetails)
   }
 
-  const handleLikesCount = async () => {
-    setLikes(likes + 1)
-    const updatedBlog = {
-      ...blogToUpdate,
-      likes: likes + 1
-    }
-    await blogService.update(blog.id, updatedBlog)
-  }
-
   const removeBlogHandler = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      await blogService.remove(blog.id)
-      onRemoveBlog(blog.id)
+      dispatch(deleteBlog(blog.id))
     }
   }
 
@@ -47,11 +30,11 @@ const Blog = ({ blog, user, onRemoveBlog }) => {
         <div>
           <div>{blog.url}</div>
           <div>
-            <div id={'likesCount'}>{likes}</div>
+            <div id={'likesCount'}>{blog.likes}</div>
             <button
               id={'likesButton'}
               type={'button'}
-              onClick={handleLikesCount}
+              onClick={() => dispatch(addLike(blog))}
             >
               {'likes'}
             </button>

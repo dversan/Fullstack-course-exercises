@@ -8,7 +8,7 @@ import Notification from './components/Notification/Notification.jsx'
 import ToggleButton from './components/ToggleButton.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotificationContent } from './reducers/notificationReducer.js'
-import { initializeBlogs, setBlogs } from './reducers/blogsReducer.js'
+import { initializeBlogs } from './reducers/blogsReducer.js'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -60,12 +60,6 @@ const App = () => {
 
   const toggleFormView = () => createBlogFormRef.current.toggleVisibility()
 
-  const removeBlog = (blogToRemove) => {
-    const blogsUpdated = blogs.filter((blog) => blog.id !== blogToRemove)
-
-    setBlogs(blogsUpdated)
-  }
-
   return (
     <>
       {user !== null && (
@@ -98,12 +92,7 @@ const App = () => {
           <h2>{'blogs list'}</h2>
           <div id={'blogsList'}>
             {blogs?.map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                user={user}
-                onRemoveBlog={removeBlog}
-              />
+              <Blog key={blog.id} blog={blog} user={user} />
             ))}
           </div>
         </div>
