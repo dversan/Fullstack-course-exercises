@@ -8,19 +8,19 @@ import Notification from './components/Notification/Notification.jsx'
 import ToggleButton from './components/ToggleButton.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotificationContent } from './reducers/notificationReducer.js'
+import { initializeBlogs, setBlogs } from './reducers/blogsReducer.js'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const createBlogFormRef = useRef()
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification)
+  const blogs = useSelector((state) => state.blogs)
 
   useEffect(() => {
-    const sortedBlogs = (blogs) => blogs.sort((a, b) => b.likes - a.likes)
-    blogService.getAll().then((blogsInDb) => setBlogs(sortedBlogs(blogsInDb)))
+    dispatch(initializeBlogs())
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
