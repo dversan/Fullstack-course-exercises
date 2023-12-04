@@ -1,9 +1,13 @@
 import styles from './notification.module.css'
+import { useDispatch } from 'react-redux'
+import { resetNotificationContent } from '../../reducers/notificationReducer.js'
 
-const Notification = ({ message, notificationType, resetNotification }) => {
+const Notification = ({ message, notificationType }) => {
+  const dispatch = useDispatch()
+
   if (message) {
     setTimeout(() => {
-      resetNotification()
+      dispatch(resetNotificationContent())
     }, 2000)
   }
 
