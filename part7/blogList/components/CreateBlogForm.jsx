@@ -1,11 +1,34 @@
 import { useState } from 'react'
+import blogService from '../services/blogs.js'
+import { setNotificationContent } from '../reducers/notificationReducer.js'
+import { useDispatch } from 'react-redux'
+import { createNewBlog } from '../reducers/blogsReducer.js'
 
-const CreateBlogForm = ({ createNewBlog, initialFormValues }) => {
+const CreateBlogForm = ({ initialFormValues, user, toggleView }) => {
+  const dispatch = useDispatch()
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
 
   const handleBolgCreationSubmit = (event) => {
     event.preventDefault()
-    createNewBlog(newBlog)
+    try {
+      blogService.setToken(user.token)
+      dispatch(createNewBlog(newBlog))
+      toggleView()
+      dispatch(
+        setNotificationContent({
+          type: 'success',
+          message: `A new blog ${newBlog.title} by ${newBlog.author} added`
+        })
+      )
+    } catch (exception) {
+      dispatch(
+        setNotificationContent({
+          message: 'Something went wrong. Blog has not been created',
+          type: 'warning'
+        })
+      )
+    }
+
     setNewBlog(initialFormValues)
   }
 

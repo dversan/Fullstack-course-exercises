@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Blog from './components/Blog/Blog.jsx'
 import blogService from './services/blogs.js'
 import loginService from './services/login.js'
@@ -8,19 +8,19 @@ import Notification from './components/Notification/Notification.jsx'
 import ToggleButton from './components/ToggleButton.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotificationContent } from './reducers/notificationReducer.js'
+import { initializeBlogs, setBlogs } from './reducers/blogsReducer.js'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const createBlogFormRef = useRef()
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification)
+  const blogs = useSelector((state) => state.blogs)
 
   useEffect(() => {
-    const sortedBlogs = (blogs) => blogs.sort((a, b) => b.likes - a.likes)
-    blogService.getAll().then((blogsInDb) => setBlogs(sortedBlogs(blogsInDb)))
+    dispatch(initializeBlogs())
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -58,26 +58,7 @@ const App = () => {
     setUser(null)
   }
 
-  const createBlog = (newBlog) => {
-    try {
-      blogService.setToken(user.token)
-      blogService.create(newBlog).then((res) => blogs.push(res))
-      createBlogFormRef.current.toggleVisibility()
-      dispatch(
-        setNotificationContent({
-          type: 'success',
-          message: `A new blog ${newBlog.title} by ${newBlog.author} added`
-        })
-      )
-    } catch (exception) {
-      dispatch(
-        setNotificationContent({
-          message: 'Something went wrong. Blog has not been created',
-          type: 'warning'
-        })
-      )
-    }
-  }
+  const toggleFormView = () => createBlogFormRef.current.toggleVisibility()
 
   const removeBlog = (blogToRemove) => {
     const blogsUpdated = blogs.filter((blog) => blog.id !== blogToRemove)
@@ -109,13 +90,14 @@ const App = () => {
           </button>
           <ToggleButton buttonLabel={'Create blog'} ref={createBlogFormRef}>
             <CreateBlogForm
-              createNewBlog={createBlog}
               initialFormValues={{ title: '', author: '', url: '' }}
+              user={user}
+              toggleView={toggleFormView}
             />
           </ToggleButton>
           <h2>{'blogs list'}</h2>
           <div id={'blogsList'}>
-            {blogs.map((blog) => (
+            {blogs?.map((blog) => (
               <Blog
                 key={blog.id}
                 blog={blog}
