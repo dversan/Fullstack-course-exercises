@@ -4,9 +4,10 @@ import { setNotificationContent } from '../reducers/notificationReducer.js'
 import { useDispatch } from 'react-redux'
 import { createNewBlog } from '../reducers/blogsReducer.js'
 
-const CreateBlogForm = ({ initialFormValues, user, toggleView }) => {
+const CreateBlogForm = ({ user, toggleView }) => {
+  const initialFormValues = { title: '', author: '', url: '' }
   const dispatch = useDispatch()
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
+  const [newBlog, setNewBlog] = useState(initialFormValues)
 
   const handleBolgCreationSubmit = (event) => {
     event.preventDefault()
