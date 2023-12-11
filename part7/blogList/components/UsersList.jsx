@@ -1,13 +1,8 @@
 import { Table } from 'react-bootstrap'
-import { useEffect, useState } from 'react'
-import usersService from '../services/users.js'
+import { Link } from 'react-router-dom'
 
-const Users = () => {
-  const [users, setUsers] = useState([])
-
-  useEffect(() => {
-    usersService.getAll().then((res) => setUsers(res))
-  }, [])
+const UsersList = ({ users }) => {
+  if (!users) return null
 
   return (
     <Table className={'container'} striped>
@@ -20,7 +15,9 @@ const Users = () => {
       <tbody>
         {users?.map((user) => (
           <tr key={user.id}>
-            <th scope='row'>{user.username}</th>
+            <th scope='row'>
+              {<Link to={`/users/${user.id}`}>{user.username}</Link>}
+            </th>
             <td>{user.blogs.length}</td>
           </tr>
         ))}
@@ -29,4 +26,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default UsersList

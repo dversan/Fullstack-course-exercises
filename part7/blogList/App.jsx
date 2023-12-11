@@ -1,13 +1,21 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
 import Home from './components/Home.jsx'
-import Users from './components/Users.jsx'
 import { useSelector } from 'react-redux'
 import Notification from './components/Notification/Notification.jsx'
 import Blogs from './components/Blogs.jsx'
+import UserInfo from './components/UserInfo.jsx'
+import UsersList from './components/UsersList'
+import { useEffect, useState } from 'react'
+import usersService from './services/users.js'
 
 const App = () => {
+  const [users, setUsers] = useState([])
   const user = useSelector((state) => state.user)
   const notification = useSelector((state) => state.notification)
+
+  useEffect(() => {
+    usersService.getAll().then((res) => setUsers(res))
+  }, [])
 
   const padding = {
     padding: 5
@@ -21,7 +29,7 @@ const App = () => {
             <Link style={padding} to='/'>
               home
             </Link>
-            <Link style={padding} to='/notes'>
+            <Link style={padding} to='/blogs'>
               blogs
             </Link>
             <Link style={padding} to='/users'>
@@ -42,9 +50,10 @@ const App = () => {
         )}
       </div>
       <Routes>
-        <Route path='/notes' element={<Blogs user={user} />} />
-        <Route path='/users' element={<Users />} />
-        <Route path='/' element={<Home user={user} />} />
+        <Route path={'/blogs'} element={<Blogs user={user} />} />
+        <Route path={'/users'} element={<UsersList users={users} />} />
+        <Route path={'/'} element={<Home user={user} />} />
+        <Route path={'/users/:id'} element={<UserInfo users={users} />} />
       </Routes>
     </Router>
   )
