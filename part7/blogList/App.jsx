@@ -7,6 +7,7 @@ import UserInfo from './components/UserInfo.jsx'
 import UsersList from './components/UsersList'
 import { useEffect, useState } from 'react'
 import usersService from './services/users.js'
+import BlogInfo from './components/BlogInfo.jsx'
 
 const App = () => {
   const [users, setUsers] = useState([])
@@ -51,6 +52,7 @@ const App = () => {
       </div>
       <Routes>
         <Route path={'/blogs'} element={<Blogs user={user} />} />
+        <Route path={'/blogs/:id'} element={<BlogInfo />} />
         <Route path={'/users'} element={<UsersList users={users} />} />
         <Route path={'/'} element={<Home user={user} />} />
         <Route path={'/users/:id'} element={<UserInfo users={users} />} />
