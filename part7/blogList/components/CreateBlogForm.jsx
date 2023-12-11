@@ -77,7 +77,7 @@ const CreateBlogForm = ({ user, toggleView }) => {
             required
           />
         </div>
-        <button type={'submit'} style={{ marginBottom: '10px' }}>
+        <button type={'submit'} className={'btn btn-primary btn-sm my-2'}>
           {'save'}
         </button>
       </form>

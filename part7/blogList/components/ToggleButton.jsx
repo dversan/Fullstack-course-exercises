@@ -19,11 +19,16 @@ const ToggleButton = forwardRef((props, refs) => {
   return (
     <>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <button className={'btn btn-primary btn-sm'} onClick={toggleVisibility}>
+          {props.buttonLabel}
+        </button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button style={{ marginBottom: '10px' }} onClick={toggleVisibility}>
+        <button
+          className={'btn btn-outline-secondary btn-sm mb-2'}
+          onClick={toggleVisibility}
+        >
           {'cancel'}
         </button>
       </div>

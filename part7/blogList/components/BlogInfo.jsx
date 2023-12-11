@@ -55,8 +55,8 @@ const BlogInfo = () => {
               ))}
             </tbody>
           </Table>
-          <form className={'row g-3'} onSubmit={handleSubmit}>
-            <div className={'col-'}>
+          <form className={'row g-2'} onSubmit={handleSubmit}>
+            <div className={'w-75'}>
               <input
                 id={'comment'}
                 className={'form-control'}
@@ -66,7 +66,7 @@ const BlogInfo = () => {
                 onChange={(e) => setComment(e.target.value)}
               />
             </div>
-            <div className={'col-auto'}>
+            <div className={'w-auto'}>
               <button type={'submit'} className={'btn btn-primary btn-sm'}>
                 {'Add Comment'}
               </button>

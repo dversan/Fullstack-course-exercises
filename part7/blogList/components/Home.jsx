@@ -35,13 +35,13 @@ const Home = ({ user }) => {
   return (
     <div className={'container'}>
       {user !== null && (
-        <div className={'container'}>
+        <div>
           <button
             type={'button'}
-            style={{ marginBottom: '10px' }}
+            className={'btn btn-outline-danger btn-sm mt-1 mb-4'}
             onClick={handleLogout}
           >
-            Logout
+            {'Logout'}
           </button>
           <ToggleButton buttonLabel={'Create blog'} ref={createBlogFormRef}>
             <CreateBlogForm user={user} toggleView={toggleFormView} />
