@@ -1,7 +1,8 @@
 import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
+import { v4 as uuid } from 'uuid'
 
-const authors = [
+let authors = [
   {
     name: 'Robert Martin',
     id: 'afa51ab0-344d-11e9-a414-719c6709cf3e',
@@ -41,7 +42,7 @@ const authors = [
  * Sin embargo, por simplicidad, almacenaremos el nombre del autor en conección con el libro
  */
 
-const books = [
+let books = [
   {
     title: 'Clean Code',
     published: 2008,
@@ -109,6 +110,7 @@ const typeDefs = `
   type Author {
     name: String!
     bookCount: Int
+    born: Int
   }
     
   type Query {
@@ -117,6 +119,15 @@ const typeDefs = `
     bookCount: Int!
     authorCount: Int!
   }
+  
+  type Mutation {
+    addBook(
+    title: String!,
+    author: String!,
+    published: Int!,
+    genres: [String!]!
+   ):Book
+   }
 `
 
 const resolvers = {
@@ -148,6 +159,17 @@ const resolvers = {
     allAuthors: () => authors,
     bookCount: () => books.length,
     authorCount: () => authors.length
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      if (!authors.some((author) => author.name === args.author)) {
+        const author = { name: args.author, id: uuid() }
+        authors = authors.concat(author)
+      }
+      return book
+    }
   },
   Author: {
     bookCount: (root) => {
