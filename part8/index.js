@@ -123,8 +123,13 @@ const resolvers = {
   Query: {
     allBooks: () => books,
     allAuthors: () => authors,
-    bookCount: (author) => books.length,
+    bookCount: () => books.length,
     authorCount: () => authors.length
+  },
+  Author: {
+    bookCount: (root) => {
+      return books.filter((book) => book.author === root.name).length
+    }
   }
 }
 
