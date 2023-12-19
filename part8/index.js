@@ -141,6 +141,15 @@ const resolvers = {
     allBooks: (root, args) => {
       const booksByAuthor = books.filter((book) => book.author === args.author)
 
+      if (!args.genre && !args.author) {
+        return books.map((book) => ({
+          title: book.title,
+          author: book.author,
+          published: book.published,
+          id: book.id
+        }))
+      }
+
       if (args.genre && args.author) {
         return booksByAuthor
           .filter((book) => book.genres.includes(args.genre))

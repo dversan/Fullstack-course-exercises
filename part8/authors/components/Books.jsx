@@ -1,15 +1,11 @@
-const Books = (props) => {
-  if (!props.show) {
-    return null
-  }
+import { Table } from 'react-bootstrap'
 
-  const books = []
-
+const Books = ({ books }) => {
   return (
-    <div>
+    <div className={'container'}>
       <h2>books</h2>
 
-      <table>
+      <Table>
         <tbody>
           <tr>
             <th></th>
@@ -17,14 +13,14 @@ const Books = (props) => {
             <th>published</th>
           </tr>
           {books.map((a) => (
-            <tr key={a.title}>
+            <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author}</td>
               <td>{a.published}</td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }

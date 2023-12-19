@@ -1,6 +1,6 @@
 import { Table } from 'react-bootstrap'
 
-const Authors = (props) => {
+const Authors = ({ authors }) => {
   return (
     <div className={'container'}>
       <h2>authors</h2>
@@ -11,7 +11,7 @@ const Authors = (props) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {props.authors.map((a) => (
+          {authors.map((a) => (
             <tr key={a.id}>
               <td>{a.name}</td>
               <td>{a.born}</td>

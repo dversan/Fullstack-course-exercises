@@ -15,10 +15,24 @@ const ALL_AUTHORS = gql`
   }
 `
 
-const App = () => {
-  const { data, loading } = useQuery(ALL_AUTHORS)
+const ALL_BOOKS = gql`
+  query allBooks($author: String, $genre: String) {
+    allBooks(author: $author, genre: $genre) {
+      title
+      author
+      published
+      id
+    }
+  }
+`
 
-  if (loading) {
+const App = () => {
+  const { data: authorsData, loading: authorsLoading } = useQuery(ALL_AUTHORS)
+  const { data: booksData, loading: booksLoading } = useQuery(ALL_BOOKS, {
+    variables: {}
+  })
+
+  if (authorsLoading || booksLoading) {
     return <div>loading...</div>
   }
 
@@ -37,8 +51,11 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path={'/'} element={<Authors authors={data.allAuthors} />} />
-        <Route path={'/books'} element={<Books />} />
+        <Route
+          path={'/'}
+          element={<Authors authors={authorsData.allAuthors} />}
+        />
+        <Route path={'/books'} element={<Books books={booksData.allBooks} />} />
         {/*<Route path={'/add-book'} element={<NewBook />} />*/}
       </Routes>
     </Router>
