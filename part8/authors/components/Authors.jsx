@@ -2,6 +2,7 @@ import { Button, Form, Table } from 'react-bootstrap'
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { EDIT_AUTHOR } from '../queries.js'
+import AuthorSelect from './AuthorSelect.jsx'
 
 const Authors = ({ authors }) => {
   const [authName, setAuthName] = useState('')
@@ -40,20 +41,22 @@ const Authors = ({ authors }) => {
       </Table>
       <h3>Set birthyear</h3>
       <Form onSubmit={submitHandler}>
-        <div>
-          name
-          <input
-            type={'text'}
-            name={'authName'}
-            value={authName}
-            onChange={(e) => setAuthName(e.target.value)}
-          />
-        </div>
+        {/*<div>*/}
+        {/*  name*/}
+        {/*  <input*/}
+        {/*    type={'text'}*/}
+        {/*    name={'authName'}*/}
+        {/*    value={authName}*/}
+        {/*    onChange={(e) => setAuthName(e.target.value)}*/}
+        {/*  />*/}
+        {/*</div>*/}
+        <AuthorSelect authors={authors} onSelectedAuthor={setAuthName} />
         <div>
           born
           <input
             type={'number'}
             name={'born'}
+            className={'mx-2'}
             value={birthDate}
             onChange={(e) => setBirthDate(Number(e.target.value))}
           />
