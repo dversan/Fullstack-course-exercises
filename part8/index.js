@@ -111,6 +111,7 @@ const typeDefs = `
     name: String!
     bookCount: Int
     born: Int
+    id:ID!
   }
     
   type Query {
