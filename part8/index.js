@@ -1,6 +1,10 @@
 import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
 import { v4 as uuid } from 'uuid'
+import mongoose from 'mongoose'
+import Book from './books/models/book.js'
+import Author from './books/models/author.js'
+import 'dotenv/config'
 
 let authors = [
   {
@@ -27,20 +31,6 @@ let authors = [
     id: 'afa5b6f3-344d-11e9-a414-719c6709cf3e'
   }
 ]
-
-/*
- * Suomi:
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
- *
- * English:
- * It might make more sense to associate a book with its author by storing the author's id in the context of the book instead of the author's name
- * However, for simplicity, we will store the author's name in connection with the book
- *
- * Spanish:
- * Podría tener más sentido asociar un libro con su autor almacenando la id del autor en el contexto del libro en lugar del nombre del autor
- * Sin embargo, por simplicidad, almacenaremos el nombre del autor en conección con el libro
- */
 
 let books = [
   {
@@ -94,15 +84,11 @@ let books = [
   }
 ]
 
-/*
-  you can remove the placeholder query once your first one has been implemented
-*/
-
 const typeDefs = `
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -127,27 +113,39 @@ const typeDefs = `
     author: String!,
     published: Int!,
     genres: [String!]!
-   ):Book
+   ):Book!
    
    editAuthor(
    name: String!,
    born: Int!
-   ):Author
+   ):Author!
    }
 `
 
+mongoose.set('strictQuery', false)
+
+const MONGODB_URI =
+  'mongodb+srv://daversan:Mongo131281@cluster0.y5ll2.mongodb.net/books?retryWrites=true&w=majority'
+
+console.log('connecting to', MONGODB_URI)
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
+
 const resolvers = {
   Query: {
-    allBooks: (root, args) => {
+    allBooks: async (root, args) => {
+      const books = await Book.find({})
       const booksByAuthor = books.filter((book) => book.author === args.author)
 
       if (!args.genre && !args.author) {
-        return books.map((book) => ({
-          title: book.title,
-          author: book.author,
-          published: book.published,
-          id: book.id
-        }))
+        return books
       }
 
       if (args.genre && args.author) {
@@ -171,19 +169,18 @@ const resolvers = {
           .map((book) => ({ title: book.title, author: book.author }))
       }
     },
-    allAuthors: () => authors,
-    bookCount: () => books.length,
-    authorCount: () => authors.length
+    allAuthors: async () => Author.find({}),
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments()
   },
   Mutation: {
-    addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
+    addBook: async (root, args) => {
+      const book = new Book({ ...args, id: uuid() })
       if (!authors.some((author) => author.name === args.author)) {
-        const author = { name: args.author, id: uuid() }
-        authors = authors.concat(author)
+        const author = new Author({ name: args.author, id: uuid() })
+        return author.save()
       }
-      return book
+      return book.save()
     },
     editAuthor: (root, args) => {
       const author = authors.find((author) => author.name === args.name)
