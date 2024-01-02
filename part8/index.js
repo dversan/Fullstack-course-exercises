@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import Book from './books/models/book.js'
 import Author from './books/models/author.js'
 import 'dotenv/config'
+import { GraphQLError } from 'graphql/error/index.js'
 
 const typeDefs = `
   type Author {
@@ -115,10 +116,32 @@ const resolvers = {
       const authors = await Author.find({})
       if (!authors.some((author) => author.name === args.author)) {
         const author = new Author({ name: args.author })
-        await author.save()
+        try {
+          await author.save()
+        } catch (error) {
+          throw new GraphQLError('Saving author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.name,
+              error
+            }
+          })
+        }
       }
       const book = new Book({ ...args, author: authorId(args.author) })
-      const savedBook = await book.save()
+      let savedBook
+
+      try {
+        savedBook = await book.save()
+      } catch (error) {
+        throw new GraphQLError('Saving book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
 
       return {
         title: savedBook.title,
