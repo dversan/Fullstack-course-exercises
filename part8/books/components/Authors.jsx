@@ -1,5 +1,5 @@
 import { Button, Form, Table } from 'react-bootstrap'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries.js'
 import AuthorSelect from './AuthorSelect.jsx'
@@ -7,8 +7,13 @@ import AuthorSelect from './AuthorSelect.jsx'
 const Authors = ({ authors }) => {
   const [authName, setAuthName] = useState('')
   const [birthDate, setBirthDate] = useState('')
+  const [token, setToken] = useState(null)
 
   const [editAuthor] = useMutation(EDIT_AUTHOR)
+
+  useEffect(() => {
+    setToken(window.localStorage.getItem('books-user-token'))
+  }, [])
 
   const submitHandler = async (event) => {
     event.preventDefault()
@@ -23,8 +28,8 @@ const Authors = ({ authors }) => {
   }
 
   return (
-    <div className={'container'}>
-      <h2>authors</h2>
+    <div className={'container mt-4'}>
+      <h2>Authors</h2>
       <Table>
         <tbody>
           <tr>
@@ -41,25 +46,30 @@ const Authors = ({ authors }) => {
           ))}
         </tbody>
       </Table>
-      <h3>Set birthyear</h3>
-      <Form onSubmit={submitHandler}>
-        <AuthorSelect authors={authors} onSelectedAuthor={setAuthName} />
-        <div>
-          born
-          <input
-            type={'number'}
-            name={'born'}
-            className={'mx-2'}
-            value={birthDate}
-            onChange={(e) => setBirthDate(Number(e.target.value))}
-          />
-        </div>
-        <div className={'pt-2'}>
-          <Button className={'btn btn-sm'} type={'submit'}>
-            Update Author
-          </Button>
-        </div>
-      </Form>
+      {token && (
+        <>
+          <h3>Set birthyear</h3>
+          <Form onSubmit={submitHandler}>
+            <AuthorSelect authors={authors} onSelectedAuthor={setAuthName} />
+            <div>
+              born
+              <input
+                type={'number'}
+                name={'born'}
+                className={'mx-2'}
+                value={birthDate}
+                onChange={(e) => setBirthDate(Number(e.target.value))}
+              />
+            </div>
+
+            <div className={'pt-2'}>
+              <Button className={'btn btn-sm'} type={'submit'}>
+                Update Author
+              </Button>
+            </div>
+          </Form>
+        </>
+      )}
     </div>
   )
 }

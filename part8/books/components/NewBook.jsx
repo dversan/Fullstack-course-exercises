@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries.js'
 import { Button } from 'react-bootstrap'
+import Notification from '../../../part2/phonebook/components/Notification/Notification.jsx'
 
 const NewBook = () => {
   const [title, setTitle] = useState('')
@@ -9,8 +10,13 @@ const NewBook = () => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
+  const [error, setError] = useState('')
 
-  const [addBook] = useMutation(ADD_BOOK)
+  const [addBook] = useMutation(ADD_BOOK, {
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message)
+    }
+  })
 
   const submit = async (event) => {
     event.preventDefault()
@@ -34,6 +40,13 @@ const NewBook = () => {
 
   return (
     <div className={'container row'}>
+      {error && (
+        <Notification
+          message={error}
+          notificationType={'warning'}
+          resetNotification={() => setError('')}
+        />
+      )}
       <h1>Add Book</h1>
       <form onSubmit={submit} className={'col'}>
         <div className={'row gy-2'}>

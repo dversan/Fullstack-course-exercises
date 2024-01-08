@@ -2,8 +2,8 @@ import { Table } from 'react-bootstrap'
 
 const Books = ({ books }) => {
   return (
-    <div className={'container'}>
-      <h2>books</h2>
+    <div className={'container mt-4'}>
+      <h2>Books</h2>
 
       <Table>
         <tbody>
