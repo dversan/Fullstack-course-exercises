@@ -31,6 +31,7 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+    navigate('/')
   }
 
   const loginButtonClickHandler = () => {

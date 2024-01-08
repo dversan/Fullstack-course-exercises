@@ -69,3 +69,11 @@ export const LOGIN = gql`
     }
   }
 `
+
+export const GET_GENRES = gql`
+  query {
+    allBooks {
+      genres
+    }
+  }
+`
