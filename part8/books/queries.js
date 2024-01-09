@@ -47,7 +47,6 @@ export const ADD_BOOK = gql`
       }
       published
       genres
-      id
     }
   }
 `
@@ -74,6 +73,15 @@ export const GET_GENRES = gql`
   query {
     allBooks {
       genres
+    }
+  }
+`
+
+export const ME = gql`
+  query {
+    me {
+      username
+      favoriteGenre
     }
   }
 `

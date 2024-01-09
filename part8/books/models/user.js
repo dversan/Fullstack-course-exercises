@@ -12,7 +12,10 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Book'
     }
-  ]
+  ],
+  favoriteGenre: {
+    type: String
+  }
 })
 
 userSchema.plugin(uniqueValidator)

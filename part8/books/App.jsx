@@ -7,6 +7,7 @@ import { ALL_AUTHORS, ALL_BOOKS } from './queries.js'
 import { Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm.jsx'
+import RecommendedBooks from './components/RecommendedBooks.jsx'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -14,16 +15,13 @@ const App = () => {
   const navigate = useNavigate()
 
   const { data: authorsData, loading: authorsLoading } = useQuery(ALL_AUTHORS)
-  const { data: booksData, loading: booksLoading } = useQuery(ALL_BOOKS, {
-    variables: {}
-  })
   const userLogAction = token ? 'logout' : 'login'
 
   useEffect(() => {
     setToken(window.localStorage.getItem('books-user-token'))
   }, [])
 
-  if (authorsLoading || booksLoading) {
+  if (authorsLoading) {
     return <div>loading...</div>
   }
 
@@ -55,6 +53,9 @@ const App = () => {
           {'add book'}
         </Link>
       )}
+      <Link style={{ padding: 5 }} to='/recommended'>
+        {'recommended'}
+      </Link>
       <Button
         variant={!token ? 'primary' : 'danger'}
         size={'sm'}
@@ -66,19 +67,14 @@ const App = () => {
       <Routes>
         <Route
           path={'/'}
-          element={
-            token ? (
-              <Books books={booksData.allBooks} />
-            ) : (
-              <LoginForm setToken={setToken} />
-            )
-          }
+          element={token ? <Books /> : <LoginForm setToken={setToken} />}
         />
         <Route
           path={'/authors'}
           element={<Authors authors={authorsData.allAuthors} />}
         />
-        <Route path={'/books'} element={<Books books={booksData.allBooks} />} />
+        <Route path={'/books'} element={<Books token={token} />} />
+        <Route path={'/recommended'} element={<RecommendedBooks />} />
         {token && <Route path={'/add-book'} element={<NewBook />} />}
       </Routes>
     </div>

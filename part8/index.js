@@ -22,7 +22,7 @@ const typeDefs = `
     published: Int!
     author: Author!
     id: ID!
-    genres: [String!]!
+    genres: [String!]
   }
   
   type User {
@@ -127,7 +127,11 @@ const resolvers = {
       if (args.genre) {
         return books
           .filter((book) => book.genres.includes(args.genre))
-          .map((book) => ({ title: book.title, author: book.author }))
+          .map((book) => ({
+            title: book.title,
+            author: bookAuthor(book.author.toString()),
+            published: book.published
+          }))
       }
     },
     allAuthors: async () => Author.find({}),
