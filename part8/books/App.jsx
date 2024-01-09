@@ -49,13 +49,15 @@ const App = () => {
         {'books'}
       </Link>
       {token && (
-        <Link style={{ padding: 5 }} to='/add-book'>
-          {'add book'}
-        </Link>
+        <>
+          <Link style={{ padding: 5 }} to='/add-book'>
+            {'add book'}
+          </Link>
+          <Link style={{ padding: 5 }} to='/recommended'>
+            {'recommended'}
+          </Link>
+        </>
       )}
-      <Link style={{ padding: 5 }} to='/recommended'>
-        {'recommended'}
-      </Link>
       <Button
         variant={!token ? 'primary' : 'danger'}
         size={'sm'}
@@ -74,8 +76,12 @@ const App = () => {
           element={<Authors authors={authorsData.allAuthors} />}
         />
         <Route path={'/books'} element={<Books token={token} />} />
-        <Route path={'/recommended'} element={<RecommendedBooks />} />
-        {token && <Route path={'/add-book'} element={<NewBook />} />}
+        {token && (
+          <>
+            <Route path={'/recommended'} element={<RecommendedBooks />} />
+            <Route path={'/add-book'} element={<NewBook />} />
+          </>
+        )}
       </Routes>
     </div>
   )
