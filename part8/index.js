@@ -5,9 +5,9 @@ import Author from './books/models/author.js'
 import User from './books/models/user.js'
 import 'dotenv/config'
 import { GraphQLError } from 'graphql/error/index.js'
-import expressMiddleware from '@apollo/server/express4'
-import ApolloServerPluginDrainHttpServer from '@apollo/server/plugin/drainHttpServer'
-import makeExecutableSchema from '@graphql-tools/schema'
+import { expressMiddleware } from '@apollo/server/express4'
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 import express from 'express'
 import cors from 'cors'
 import http from 'http'
@@ -196,6 +196,15 @@ const resolvers = {
         })
       }
 
+      pubsub.publish('BOOK_ADDED', {
+        bookAdded: {
+          title: savedBook.title,
+          published: savedBook.published,
+          author: bookAuthor(savedBook.author.toString()),
+          genres: savedBook.genres
+        }
+      })
+
       return {
         title: savedBook.title,
         published: savedBook.published,
@@ -266,8 +275,8 @@ const resolvers = {
     }
   },
   Subscription: {
-    postCreated: {
-      subscribe: () => pubsub.asyncIterator(['POST_CREATED'])
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
     }
   }
 }
@@ -293,7 +302,7 @@ const resolvers = {
 //   console.log(`Server ready at ${url}`)
 // })
 
-// Express middleware, which means that Express must also be configured for the application, with the GraphQL server acting as middleware
+// using Express middleware, which means that Express must also be configured for the application, with the GraphQL server acting as middleware
 
 const start = async () => {
   const app = express()
@@ -302,7 +311,7 @@ const start = async () => {
   // Create our WebSocket server using the HTTP server we just set up.
   const wsServer = new WebSocketServer({
     server: httpServer,
-    path: '/subscriptions'
+    path: '/'
   })
 
   const schema = makeExecutableSchema({ typeDefs, resolvers })
@@ -331,6 +340,7 @@ const start = async () => {
 
   await server.start()
 
+  // integration function
   app.use(
     '/',
     cors(),
