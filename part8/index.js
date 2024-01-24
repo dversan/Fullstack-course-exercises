@@ -6,6 +6,12 @@ import User from './books/models/user.js'
 import 'dotenv/config'
 import { GraphQLError } from 'graphql/error/index.js'
 import { startStandaloneServer } from '@apollo/server/standalone'
+import expressMiddleware from '@apollo/server/express4'
+import ApolloServerPluginDrainHttpServer from '@apollo/server/plugin/drainHttpServer'
+import makeExecutableSchema from '@graphql-tools/schema'
+import express from 'express'
+import cors from 'cors'
+import http from 'http'
 
 import jwt from 'jsonwebtoken'
 
@@ -42,6 +48,10 @@ const typeDefs = `
     authorCount: Int!
     me: User
   }
+  
+  type Subscription {
+    bookAdded: Book!
+  }    
   
   type Mutation {
     addBook(
@@ -254,21 +264,67 @@ const resolvers = {
   }
 }
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers
-})
+// startStandaloneServer does not allow adding subscriptions to the application.
 
-startStandaloneServer(server, {
-  listen: { port: 4000 },
-  context: async ({ req, res }) => {
-    const auth = req ? req.headers.authorization : null
-    if (auth && auth.startsWith('Bearer ')) {
-      const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
-      const currentUser = await User.findById(decodedToken.id).populate('books')
-      return { currentUser }
-    }
-  }
-}).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers
+// })
+
+// startStandaloneServer(server, {
+//   listen: { port: 4000 },
+//   context: async ({ req, res }) => {
+//     const auth = req ? req.headers.authorization : null
+//     if (auth && auth.startsWith('Bearer ')) {
+//       const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
+//       const currentUser = await User.findById(decodedToken.id).populate('books')
+//       return { currentUser }
+//     }
+//   }
+// }).then(({ url }) => {
+//   console.log(`Server ready at ${url}`)
+// })
+
+// Express middleware, which means that Express must also be configured for the application, with the GraphQL server acting as middleware
+
+const start = async () => {
+  const app = express()
+  const httpServer = http.createServer(app)
+
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+  })
+
+  await server.start()
+
+  app.use(
+    '/',
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        const auth = req ? req.headers.authorization : null
+        if (auth && auth.startsWith('Bearer ')) {
+          const decodedToken = jwt.verify(
+            auth.substring(7),
+            process.env.JWT_SECRET
+          )
+          const currentUser = await User.findById(decodedToken.id).populate(
+            'books'
+          )
+          return { currentUser }
+        }
+      }
+    })
+  )
+
+  await new Promise(() =>
+    httpServer.listen(4000, () =>
+      console.log(`Server is now running on http://localhost:${4000}`)
+    )
+  )
+}
+
+start()
