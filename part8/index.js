@@ -13,8 +13,10 @@ import cors from 'cors'
 import http from 'http'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
-
 import jwt from 'jsonwebtoken'
+import { PubSub } from 'graphql-subscriptions'
+
+const pubsub = new PubSub()
 
 const typeDefs = `
   type Author {
@@ -262,6 +264,11 @@ const resolvers = {
       const books = await Book.find({})
       return books.filter((book) => book.author === root.name).length
     }
+  },
+  Subscription: {
+    postCreated: {
+      subscribe: () => pubsub.asyncIterator(['POST_CREATED'])
+    }
   }
 }
 
@@ -292,6 +299,7 @@ const start = async () => {
   const app = express()
   const httpServer = http.createServer(app)
 
+  // Create our WebSocket server using the HTTP server we just set up.
   const wsServer = new WebSocketServer({
     server: httpServer,
     path: '/subscriptions'
@@ -300,6 +308,7 @@ const start = async () => {
   const schema = makeExecutableSchema({ typeDefs, resolvers })
   const serverCleanup = useServer({ schema }, wsServer)
 
+  // Set up ApolloServer
   const server = new ApolloServer({
     schema,
     plugins:
@@ -343,10 +352,10 @@ const start = async () => {
     })
   )
 
-  await new Promise(() =>
-    httpServer.listen(4000, () =>
-      console.log(`Server is now running on http://localhost:${4000}`)
-    )
+  const PORT = 4000
+  // Now that our HTTP server is fully set up, we can listen to it.
+  httpServer.listen(PORT, () =>
+    console.log(`Server is now running on http://localhost:${4000}`)
   )
 }
 
