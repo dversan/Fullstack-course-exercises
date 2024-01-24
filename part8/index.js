@@ -11,7 +11,9 @@ import ApolloServerPluginDrainHttpServer from '@apollo/server/plugin/drainHttpSe
 import makeExecutableSchema from '@graphql-tools/schema'
 import express from 'express'
 import cors from 'cors'
-import http from 'http'
+import http, { createServer } from 'http'
+import { WebSocketServer } from 'ws'
+import { useServer } from 'graphql-ws/lib/use/ws'
 
 import jwt from 'jsonwebtoken'
 
@@ -292,8 +294,7 @@ const start = async () => {
   const httpServer = http.createServer(app)
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema: makeExecutableSchema({ typeDefs, resolvers }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
   })
 
