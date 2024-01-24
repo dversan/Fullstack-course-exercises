@@ -5,13 +5,12 @@ import Author from './books/models/author.js'
 import User from './books/models/user.js'
 import 'dotenv/config'
 import { GraphQLError } from 'graphql/error/index.js'
-import { startStandaloneServer } from '@apollo/server/standalone'
 import expressMiddleware from '@apollo/server/express4'
 import ApolloServerPluginDrainHttpServer from '@apollo/server/plugin/drainHttpServer'
 import makeExecutableSchema from '@graphql-tools/schema'
 import express from 'express'
 import cors from 'cors'
-import http, { createServer } from 'http'
+import http from 'http'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
 
@@ -293,9 +292,32 @@ const start = async () => {
   const app = express()
   const httpServer = http.createServer(app)
 
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/subscriptions'
+  })
+
+  const schema = makeExecutableSchema({ typeDefs, resolvers })
+  const serverCleanup = useServer({ schema }, wsServer)
+
   const server = new ApolloServer({
-    schema: makeExecutableSchema({ typeDefs, resolvers }),
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+    schema,
+    plugins:
+      // Proper shutdown for the HTTP server.
+      [
+        ApolloServerPluginDrainHttpServer({ httpServer }),
+
+        // Proper shutdown for the WebSocket server.
+        {
+          async serverWillStart() {
+            return {
+              async drainServer() {
+                await serverCleanup.dispose()
+              }
+            }
+          }
+        }
+      ]
   })
 
   await server.start()
