@@ -2,8 +2,8 @@ import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import Authors from './components/Authors.jsx'
 import Books from './components/Books.jsx'
 import NewBook from './components/NewBook.jsx'
-import { useApolloClient, useQuery } from '@apollo/client'
-import { ALL_AUTHORS } from './queries.js'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from './queries.js'
 import { Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm.jsx'
@@ -20,6 +20,18 @@ const App = () => {
   useEffect(() => {
     setToken(window.localStorage.getItem('books-user-token'))
   }, [])
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      alert(`Book ${addedBook.title} added`)
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook)
+        }
+      })
+    }
+  })
 
   if (authorsLoading) {
     return <div>loading...</div>

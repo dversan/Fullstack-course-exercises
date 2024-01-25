@@ -114,7 +114,7 @@ const resolvers = {
         return books.map((book) => ({
           title: book.title,
           published: book.published,
-          author: bookAuthor(book.author.toString()),
+          // author: bookAuthor(book.author.toString()),
           genres: book.genres
         }))
       }
