@@ -97,6 +97,8 @@ mongoose
     console.log('error connection to MongoDB:', error.message)
   })
 
+mongoose.set('debug', true)
+
 const books = await Book.find({})
 const authors = await Author.find({})
 const authorId = (authorName) =>
@@ -114,7 +116,7 @@ const resolvers = {
         return books.map((book) => ({
           title: book.title,
           published: book.published,
-          // author: bookAuthor(book.author.toString()),
+          author: bookAuthor(book.author?.toString()) || { name: 'no author' },
           genres: book.genres
         }))
       }

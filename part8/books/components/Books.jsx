@@ -4,10 +4,10 @@ import { ALL_BOOKS, GET_GENRES } from '../queries.js'
 import { useState } from 'react'
 
 const Books = () => {
-  const [selectedGenre, setSelectedGenre] = useState('')
+  const [selectedGenre, setSelectedGenre] = useState()
 
   const { data: allBooksData, loading: allBooksLoading } = useQuery(ALL_BOOKS, {
-    variables: { genre: selectedGenre || '' }
+    variables: { genre: selectedGenre }
   })
   const books = allBooksData?.allBooks
 

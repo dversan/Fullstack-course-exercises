@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import LoginForm from './components/LoginForm.jsx'
 import RecommendedBooks from './components/RecommendedBooks.jsx'
+import { updateCache } from './ utils/helpers.jsx'
 
 const App = () => {
   const [token, setToken] = useState(null)
